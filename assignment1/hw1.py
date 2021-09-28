@@ -10,6 +10,7 @@ import getopt
 import sys
 import math
 
+#TODO Change to find factorization not factors
 def factors(num):
 	primes = [2]
 	print("finding primes")
