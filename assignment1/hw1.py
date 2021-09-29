@@ -12,9 +12,9 @@ import math
 
 #TODO Change to find factorization not factors
 def factors(num):
-	print("Num: ", num)
+	# print("Num: ", num)
 	primes = [2]
-	print("finding primes")
+	# print("finding primes")
 	
 	if(num == 1):
 		return []
@@ -40,16 +40,6 @@ def factors(num):
 			primes.append(i)
 			if(num%i == 0):
 				return [i] + factors(int(num/i))
-
-	fac=[]
-	# if(num == 1):
-	# 	return fac
-
-	# print("finding prime factors")
-	# for prime in primes:
-	# 	if(num%prime == 0):
-	# 		# fac.append(prime)
-	# 		return [prime] + factors(num/prime)
 
 	return [int(num)]
 
