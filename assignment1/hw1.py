@@ -12,8 +12,15 @@ import math
 
 #TODO Change to find factorization not factors
 def factors(num):
+	print("Num: ", num)
 	primes = [2]
 	print("finding primes")
+	
+	if(num == 1):
+		return []
+
+	if(num%2 == 0):
+		return [2] + factors(int(num/2))
 	# find all prime numbers that could be factors
 	# Only have to search up to num/2 because any number higher will not be a factor
 
@@ -24,23 +31,27 @@ def factors(num):
 		isprime = 0
 		check = math.ceil(math.sqrt(i))+1
 		for j in range(2, check):
+			#Check if i is a multiple of j
 			if(i%j == 0):
 				isprime = 1
 				break
 			
 		if(isprime == 0):
 			primes.append(i)
+			if(num%i == 0):
+				return [i] + factors(int(num/i))
 
 	fac=[]
-	if(num == 1):
-		return fac
+	# if(num == 1):
+	# 	return fac
 
-	print("finding prime factors")
-	for prime in primes:
-		if(num%prime == 0):
-			fac.append(prime)
+	# print("finding prime factors")
+	# for prime in primes:
+	# 	if(num%prime == 0):
+	# 		# fac.append(prime)
+	# 		return [prime] + factors(num/prime)
 
-	return fac
+	return [int(num)]
 
 if __name__ == "__main__":
 	num = ""
@@ -66,4 +77,6 @@ if __name__ == "__main__":
 				pass
 	
 	facts = factors(num)
+	if(len(facts) == 1):
+		facts = []
 	print(facts)
