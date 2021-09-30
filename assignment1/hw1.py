@@ -64,7 +64,7 @@ def factors(num):
 	# find all prime numbers that could be factors
 	# Only have to search up to sqrt(num) because any number higher will not be a factor
 	# for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
-	i = 2
+	i = 3
 	while(i*i <= num):							#sqrt(num) times
 		isprime = 0								
 		#check if i is prime
@@ -72,19 +72,19 @@ def factors(num):
 		# until the sqrt of the number because all other numbers will be a multiple
 		# of a value already checked
 		# check = math.ceil(i/2)+1				#sqrt(num) times
-		j = 2
+		j = 3
 		while (j*j <= i): 						#sqrt(sqrt(n)) * sqrt(n) times
 			#Check if i is a multiple of j
 			if(i%j == 0):						#sqrt(sqrt(n)) * sqrt(n) times
 				isprime = 1						
 				#breaks when i is not prime
 				break
-			j+=1
+			j+=2
 		#if i is prime, check if it is a factor of num	
 		if(isprime == 0):						
 			if(num%i == 0):						#sqrt(num) times
 				return [i] + factors(int(num/i))
-		i+=1
+		i+=2
 
 	#if num is prime, return
 	return [int(num)]
@@ -116,6 +116,7 @@ def getinput():
 
 if __name__ == "__main__":
 	num = getinput()
+	# num = int(sys.argv[1])
 	
 	facts = factors(num)
 	
