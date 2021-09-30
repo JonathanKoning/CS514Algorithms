@@ -48,41 +48,43 @@ def factorsTest(num, num2):
 	return ([int(num)], num2)
 
 
-#TODO Change to find factorization not factors
 def factors(num):
-	# print("Num: ", num)
-	# primes = [2]
-	# print("finding primes")
-	
 	if(num == 1):
 		return []
 
 	if(num%2 == 0):
 		return [2] + factors(int(num/2))
+
 	# find all prime numbers that could be factors
 	# Only have to search up to num/2 because any number higher will not be a factor
-
-	# To determine if a number is prime, we only have to have to search
-	# until the sqrt of the number because all other numbers will be a multiple
-	# of a value already checked
-	for i in range(2, math.ceil(num/2) + 1):	#n/2 times
+	for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
 		isprime = 0								#n/2 times
 		# check = math.ceil(math.sqrt(i))+1
+
+		#check if i is prime
+		# To determine if a number is prime, we only have to have to search
+		# until the sqrt of the number because all other numbers will be a multiple
+		# of a value already checked
 		check = math.ceil(i/2)+1				#n/2 times
-		for j in range(2, check):			 	#n/4 * n/2; 
+		j = 2
+		#for j in range(2, check):			 	#n/4 * n/2; the last case of n/4 dominates the rest
+		while (j*j <= i): 
 			#Check if i is a multiple of j
 			if(i%j == 0):						#j * n/2 
 				isprime = 1						#j * n/2
 				#breaks when i is not prime
 				break
-			
+			j+=1
+		#if i is prime, check if it is a factor of num	
 		if(isprime == 0):						#n/2
 			if(num%i == 0):
 				return [i] + factors(int(num/i))
 
+	#if num is prime, return
 	return [int(num)]
 
-if __name__ == "__main__":
+
+def getinput():
 	num = ""
 	if(len(sys.argv) > 1): 
 		num = sys.argv[1]
@@ -103,10 +105,16 @@ if __name__ == "__main__":
 			try:
 				num = int(num)
 			except:
-				pass
+				pass	
+	return int(num)
+
+if __name__ == "__main__":
+	num = getinput()
 	
 	# facts = factorsTest(num, 0)
 	facts = factors(num)
+
+	#if facts only contains 1 number, then num was prime
 	if(len(facts) == 1):
 		facts = []
 	print(facts)
