@@ -63,9 +63,9 @@ def factors(num):
 
 	# find all prime numbers that could be factors
 	# Only have to search up to sqrt(num) because any number higher will not be a factor
-	for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
-	# i = 2
-	# while(i*i < num):							#sqrt(num) times
+	# for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
+	i = 2
+	while(i*i <= num):							#sqrt(num) times
 		isprime = 0								
 		#check if i is prime
 		# To determine if a number is prime, we only have to have to search
@@ -84,7 +84,7 @@ def factors(num):
 		if(isprime == 0):						
 			if(num%i == 0):						#sqrt(num) times
 				return [i] + factors(int(num/i))
-		# i+=1
+		i+=1
 
 	#if num is prime, return
 	return [int(num)]
