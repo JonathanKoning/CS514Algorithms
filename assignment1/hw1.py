@@ -27,23 +27,29 @@ def factorsTest(num, num2):
 	# To determine if a number is prime, we only have to have to search
 	# until the sqrt of the number because all other numbers will be a multiple
 	# of a value already checked
-	for i in range(2, math.ceil(num/2) + 1):	#n/2 times
+	# for i in range(2, math.ceil(num/2) + 1):	#n/2 times
+	i = 2
+	while(i*i < num):
 		num2 = num2 + 1
 		isprime = 0								#n/2 times
 		# check = math.ceil(math.sqrt(i))+1
 		check = math.ceil(i/2)+1				#n/2 times
-		for j in range(2, check):			 	#n/4 * n/2; 
+		# for j in range(2, check):			 	#n/4 * n/2; 
+		j=2
+		while(j*j < i):
 			num2 = num2 + 1
 			#Check if i is a multiple of j
 			if(i%j == 0):						#j * n/2 
 				isprime = 1						#j * n/2
 				#breaks when i is not prime
 				break
+			j+=1
 			
 		if(isprime == 0):						#n/2
 			if(num%i == 0):
 				l,n = factorsTest(int(num/i), 0)
 				return ([i] + l, num2+n)
+		i+=1
 
 	return ([int(num)], num2)
 
@@ -56,21 +62,20 @@ def factors(num):
 		return [2] + factors(int(num/2))
 
 	# find all prime numbers that could be factors
-	# Only have to search up to num/2 because any number higher will not be a factor
-	for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
-		isprime = 0								#n/2 times
-		# check = math.ceil(math.sqrt(i))+1
-
+	# Only have to search up to sqrt(num) because any number higher will not be a factor
+	#for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
+	i = 2
+	while(i*i < num):
+		isprime = 0								#sqrt(num) times
 		#check if i is prime
 		# To determine if a number is prime, we only have to have to search
 		# until the sqrt of the number because all other numbers will be a multiple
 		# of a value already checked
-		check = math.ceil(i/2)+1				#n/2 times
+		check = math.ceil(i/2)+1				#sqrt(num) times
 		j = 2
-		#for j in range(2, check):			 	#n/4 * n/2; the last case of n/4 dominates the rest
-		while (j*j <= i): 
+		while (j*j <= i): 						#sqrt(sqrt(n)) times
 			#Check if i is a multiple of j
-			if(i%j == 0):						#j * n/2 
+			if(i%j == 0):						#sqrt(sqrt(n)) times
 				isprime = 1						#j * n/2
 				#breaks when i is not prime
 				break
@@ -79,6 +84,7 @@ def factors(num):
 		if(isprime == 0):						#n/2
 			if(num%i == 0):
 				return [i] + factors(int(num/i))
+		i+=1
 
 	#if num is prime, return
 	return [int(num)]
@@ -111,11 +117,12 @@ def getinput():
 if __name__ == "__main__":
 	num = getinput()
 	
-	# facts = factorsTest(num, 0)
+	#facts = factorsTest(num, 0)
 	facts = factors(num)
-
+	
 	#if facts only contains 1 number, then num was prime
 	if(len(facts) == 1):
 		facts = []
 	print(facts)
-	# print("Complexity: ", ((num^2)/8 + num/2)/2)
+	# print("sqrt(sqrt(n)) ", facts[1]/(math.sqrt(math.sqrt(num))))
+	# print("sqrt(sqrt(n)) * sqrt(n) ", facts[1]/(math.sqrt(math.sqrt(num)) * math.sqrt(num)) )
