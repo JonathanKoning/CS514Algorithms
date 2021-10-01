@@ -9,7 +9,8 @@ import os
 import getopt
 import sys
 import math
-
+import datetime
+import csv
 def factorsTest(num, num2):
 	# print("Num: ", num)
 	# primes = [2]
@@ -19,7 +20,7 @@ def factorsTest(num, num2):
 		return ([], num2)
 
 	if(num%2 == 0):
-		l,n = factorsTest(int(num/2), 0)
+		l,n = factorsTest(int(num/2), 1)
 		return ([2] + l, num2+n)
 	# find all prime numbers that could be factors
 	# Only have to search up to num/2 because any number higher will not be a factor
@@ -47,7 +48,7 @@ def factorsTest(num, num2):
 			
 		if(isprime == 0):						#n/2
 			if(num%i == 0):
-				l,n = factorsTest(int(num/i), 0)
+				l,n = factorsTest(int(num/i), 1)
 				return ([i] + l, num2+n)
 		i+=1
 
@@ -65,7 +66,7 @@ def factors(num):
 	# Only have to search up to sqrt(num) because any number higher will not be a factor
 	# for i in range(2, math.ceil(num/2) + 1):	#n/2 times worst case
 	i = 3
-	while(i*i <= num):							#sqrt(num) times
+	while(i*i <= num):							#sqrt(num)/2 times
 		isprime = 0								
 		#check if i is prime
 		# To determine if a number is prime, we only have to have to search
@@ -73,16 +74,16 @@ def factors(num):
 		# of a value already checked
 		# check = math.ceil(i/2)+1				#sqrt(num) times
 		j = 3
-		while (j*j <= i): 						#sqrt(sqrt(n)) * sqrt(n) times
+		while (j*j <= i): 						#sqrt(sqrt(n))/2 * sqrt(n)/2 times
 			#Check if i is a multiple of j
-			if(i%j == 0):						#sqrt(sqrt(n)) * sqrt(n) times
+			if(i%j == 0):						#sqrt(sqrt(n))/2 * sqrt(n)/2 times
 				isprime = 1						
 				#breaks when i is not prime
 				break
-			j+=2
+			j+=2								#sqrt(sqrt(n))/2 * sqrt(n)/2 times
 		#if i is prime, check if it is a factor of num	
 		if(isprime == 0):						
-			if(num%i == 0):						#sqrt(num) times
+			if(num%i == 0):						#sqrt(num)/2 times
 				return [i] + factors(int(num/i))
 		i+=2
 
@@ -116,16 +117,52 @@ def getinput():
 
 if __name__ == "__main__":
 	num = getinput()
-	# num = int(sys.argv[1])
-	
 	facts = factors(num)
-	
 	#if facts only contains 1 number, then num was prime
 	if(len(facts) == 1):
 		facts = []
 	print(facts)
 
 
-	# facts = factorsTest(num, 0)
+
+
+
+	# num = int(sys.argv[1])
+	# i = 0
+	# j = 1
+	# longest = datetime.datetime.now()
+	# longest = longest-longest
+	# print(longest)
+	# while i < 500:
+	# 	start = datetime.datetime.now()
+	# 	facts = factors(j)
+	# 	stop = datetime.datetime.now()
+	# 	duration = stop-start
+	# 	if(duration > longest):
+	# 		print(j)
+	# 		print(duration)
+	# 		row = [str(j),str(duration)]
+	# 		with open("results.csv", 'a') as f:
+	# 			writer = csv.writer(f)
+	# 			writer.writerow(row)
+
+	# 		longest = duration
+	# 		i+=1
+
+	# 	j+=1
+	#if facts only contains 1 number, then num was prime
+	#if(len(facts) == 1):
+	#	facts = []
+	#print(facts)
+	#duration = stop-start
+	# print(start)
+	# print(stop)
+	#print(duration)
+	# print(f"elapsed time:  {stop-start:0.6f}")
+
+	#facts = factorsTest(num, 0)
 	# runtime = (math.sqrt(num) + math.sqrt(math.sqrt(num)) * math.sqrt(num)) * math.log(num,2)
 	# print("sqrt(sqrt(n)) * sqrt(n) * 1/pow(2,log(num,2) ", facts[1]/runtime)
+	#runtime = math.sqrt(num)/2 *(1 + math.sqrt(math.sqrt(num))/2)*math.log(num, 2)
+	#print(facts)
+	#print(runtime)
