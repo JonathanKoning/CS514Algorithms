@@ -1,12 +1,33 @@
 import sys
 import getopt
 import math
-
-
-
+import datetime
+import random
 
 def getinput():
 	array = []
+
+	if(sys.argv[1] == "-r"):
+		num = ""
+		num = sys.argv[2]
+		try:
+			num = int(num)
+		except:
+			pass
+		while isinstance(num,int) == False or num <= 0:
+			print("Error! Invalid input!")
+			num = input("please enter a positive integer:" )
+			try:
+				num = int(num)
+			except:
+				pass
+		
+		for i in range(num):
+			array.append(random.randint(0, 1000000))
+		
+		return array
+
+
 	try:
 		array = list(map(int, sys.argv[1:]))
 	except:
@@ -49,18 +70,37 @@ def mergeSort(A):
 
 	half = int(len(A)/2)
 	AL = A[:half]
-	# print(AL)
 	AR = A[half:]
-	# print(AR)
 	AL = mergeSort(AL)
 	AR = mergeSort(AR)
 	sorted = merge(AL, AR)
 
 	return sorted
 
+
+def quickSort(A):
+	if A == []:
+		return []
+	else:
+		pivot = A[0]
+		left = [x for x in A if x < pivot]
+		right = [x for x in A[1:] if x >= pivot]
+		return quickSort(left) + [pivot] + quickSort(right)
+
 if __name__ == "__main__":
 	A = getinput()
-	print(A)
+	# print(A)
 
+	start = datetime.datetime.now()
 	sorted = mergeSort(A)
-	print(sorted)
+	stop = datetime.datetime.now()
+	duration = stop-start
+	#print("mergeSort: ", sorted)
+	print("mergeSort Duration: ", duration)
+	
+	start = datetime.datetime.now()
+	sorted = quickSort(A)
+	stop = datetime.datetime.now()
+	duration = stop-start
+	# print("quickSort: ", sorted)
+	print("quickSort Duration: ", duration)
