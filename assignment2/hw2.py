@@ -157,12 +157,12 @@ if __name__ == "__main__":
 	sorted = mergeSort(A)
 	stop = datetime.datetime.now()
 	duration = stop-start
-	#print("mergeSort: ", sorted)
-	print("mergeSort Duration: ", duration)
+	print("mergeSort: ", sorted)
+	# print("mergeSort Duration: ", duration)
 	
 	start = datetime.datetime.now()
 	sorted = quickSort(A)
 	stop = datetime.datetime.now()
 	duration = stop-start
-	# print("quickSort: ", sorted)
-	print("quickSort Duration: ", duration)
+	print("quickSort: ", sorted)
+	# print("quickSort Duration: ", duration)
