@@ -62,6 +62,58 @@ def HeapSort(A):
 	return A
 
 
+
+def merge(AL, AR):
+	A = []
+
+	i = 0
+	j = 0
+	while (i < len(AL) and j < len(AR)):
+		if(AL[i] <= AR[j]):
+			A.append(AL[i])
+			i+=1
+		else:
+			A.append(AR[j])
+			j+=1
+	
+	if(i < len(AL)):
+		while i < len(AL):
+			A.append(AL[i])
+			i+=1
+	else:
+		while j < len(AR):
+			A.append(AR[j])
+			j+=1
+
+	return A
+
+
+def mergeSort(A):
+	if(len(A) == 1):
+		return A
+
+	half = int(len(A)/2)
+	AL = A[:half]
+	AR = A[half:]
+	AL = mergeSort(AL)
+	AR = mergeSort(AR)
+	sorted = merge(AL, AR)
+
+	return sorted
+
+
+def quickSort(A):
+	if A == []:
+		return []
+	else:
+		pivot = A[0]
+		left = [x for x in A if x < pivot]
+		right = [x for x in A[1:] if x >= pivot]
+		return quickSort(left) + [pivot] + quickSort(right)
+
+
+
+
 def randomData(num):
 	array = []
 	for i in range(num):
