@@ -46,41 +46,102 @@ def BuildMaxHeap(A):
 
 def HeapSort(A):
 	A = BuildMaxHeap(A)
-	print(A)
+	# print(A)
 	s = len(A)
 	n = len(A)-1
 	while(s > 1): 
 		A[0], A[n] = A[n], A[0]
-		print(A)
+		# print(A)
 		s-=1
 		n-=1
 		A = Maxheapify(A[:s], 0) + A[s:]
-		print(A)
+		# print(A)
 
-	print("Sorted HeapSort")
-	print(A)
+	# print("Sorted HeapSort")
+	# print(A)
 	return A
-
-
-
-
-
-
-
-
 
 
 def randomData(num):
 	array = []
 	for i in range(num):
 		array.append(random.randint(0, 10000))
-	#i = 0
-	#while i < num:
-	#   array.append(i)
-	#   i+=1
 
 	return array
 
+def sortedData(num):
+	i = 0
+	while i < num:
+		array.append(i)
+		i+=1
+
+def dataMode():
+	points = 1000
+	with open("results_1000r.csv", 'w', newline='') as f:
+		row = ["n", "HeapSort", "mergeSort", "quickSort"]
+		writer = csv.writer(f)
+		writer.writerow(row)
+
+	with open("results_1000s.csv", 'w', newline='') as f:
+		row = ["n", "HeapSort". "mergeSort", "quickSort"]
+		writer = csv.writer(f)
+		writer.writerow(row)
+
+
+	for i in range(1,points):
+		###################Random############################
+		#Form array of random values
+		A = randomData(i)
+
+		#Sort using HeapSort
+		start = time.perf_counter()
+		sorted = HeapSort(A)
+		stop = time.perf_counter()
+		HeapSortduration = stop-start
+
+
+		#Sort using mergeSort
+		start = time.perf_counter()
+		sorted = mergeSort(A)
+		stop = time.perf_counter()
+		mergeSortduration = stop-start
+	
+		#Sort using quickSort
+		start = time.perf_counter()
+		sorted = quickSort(A)
+		stop = time.perf_counter()
+		quickSotduration = stop-start
+		row = [str(i), str(HeapSortduration), str(mergeSortduration), str(quickSotduration)]
+		with open("results_1000r.csv", 'a', newline='') as f:
+			writer = csv.writer(f)
+			writer.writerow(row)
+
+		###################Sorted############################
+		#Form array of sorted values
+		A = sortedData(i)
+
+		#Sort using HeapSort
+		start = time.perf_counter()
+		sorted = HeapSort(A)
+		stop = time.perf_counter()
+		HeapSortduration = stop-start
+
+
+		#Sort using mergeSort
+		start = time.perf_counter()
+		sorted = mergeSort(A)
+		stop = time.perf_counter()
+		mergeSortduration = stop-start
+	
+		#Sort using quickSort
+		start = time.perf_counter()
+		sorted = quickSort(A)
+		stop = time.perf_counter()
+		quickSotduration = stop-start
+		row = [str(i), str(HeapSortduration), str(mergeSortduration), str(quickSotduration)]
+		with open("results_1000s.csv", 'a', newline='') as f:
+			writer = csv.writer(f)
+			writer.writerow(row)
 
 def getinput():
 	array = []
@@ -107,10 +168,24 @@ def getinput():
 			except:
 				pass
 
-		# for i in range(num):
-			# array.append(random.randint(0, 1000000))
-
 		return randomData(num)
+
+	if(sys.argv[1] == "-s"):
+		num = ""
+		num = sys.argv[2]
+		try:
+			num = int(num)
+		except:
+			pass
+		while isinstance(num,int) == False or num <= 0:
+			print("Error! Invalid input!")
+			num = input("please enter a positive integer:" )
+			try:
+				num = int(num)
+			except:
+				pass
+
+		return sortedData(num)
 
 	elif(sys.argv[1] == "-d"):
 		dataMode()
@@ -131,10 +206,10 @@ def getinput():
 
 if __name__ == "__main__":
 	A = getinput()
-	print(A)
+	# print(A)
 	if(A == "datamode"):
 		exit()
 
 	Hsorted = HeapSort(A)
-	print("Sorted")
+	# print("Sorted")
 	print(Hsorted)
