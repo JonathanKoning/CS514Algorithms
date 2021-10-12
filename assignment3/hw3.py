@@ -9,13 +9,10 @@ import time
 #if i violates the heap property, i.e., smaller than one of its children:
 # exchange A[i] with Max(A[Left[i], A[Right[i]]).
 # recusrsively call Maxheapify on A,j where A[j] and A[i] have just been exchanged
-def Maxheapify(A, i): 
+def Maxheapify(A, i):
 	left = int(2*i+1)
 	right = int(2*i+2)
-	#print("len(A): ", len(A))
-	#print("left: ", left)
-	#print("right: ", right)
-
+	
 	if(left >= len(A)):
 		return A
 
@@ -27,39 +24,33 @@ def Maxheapify(A, i):
 	elif((A[i] < A[left]) and (A[left] >= A[right])):
 		A[i], A[left] = A[left], A[i]
 		A = Maxheapify(A, left)
+
 	elif((A[i] < A[right]) and (A[right] > A[left])):
 		A[i], A[right] = A[right], A[i]
 		A = Maxheapify(A, right)
-
+	# print(A)
 	return A
 
 def BuildMaxHeap(A):
 	N = len(A)
-
 	i = int(math.floor((N-1)/2))
+
 	while(i >= 0): 
 		A = Maxheapify(A, i)
 		i-=1
 
 	return A
 
-
-
 def HeapSort(A):
 	A = BuildMaxHeap(A)
-	# print(A)
 	s = len(A)
 	n = len(A)-1
 	while(s > 1): 
 		A[0], A[n] = A[n], A[0]
-		# print(A)
 		s-=1
 		n-=1
 		A = Maxheapify(A[:s], 0) + A[s:]
-		# print(A)
 
-	# print("Sorted HeapSort")
-	# print(A)
 	return A
 
 
@@ -202,35 +193,7 @@ def dataMode():
 			writer = csv.writer(f)
 			writer.writerow(row)
 
-		# # print("quickSort: ", sorted)
-		# row = [str(i), str(mergeSortduration), str(quickSortduration)]
-		# # row = [str(i), str(HeapSortduration), str(mergeSortduration), str(quickSortduration)]
-		# with open("real_results_1000r.csv", 'a', newline='') as f:
-		# 	writer = csv.writer(f)
-		# 	writer.writerow(row)
-
-		# A = sortedData(i)
-		# # print(A)
-		# # start = time.perf_counter()
-		# # sorted = HeapSort(A)
-		# # stop = time.perf_counter()
-		# # HeapSortduration = stop-start
-
-		# start = time.perf_counter()
-		# sorted = mergeSort(A)
-		# stop = time.perf_counter()
-		# mergeSortduration = stop-start
-	
-		# start = time.perf_counter()
-		# sorted = quickSort(A)
-		# stop = time.perf_counter()
-		# quickSortduration = stop-start
-		# # print("quickSort: ", sorted)
-		# # row = [str(i), str(HeapSortduration), str(mergeSortduration), str(quickSortduration)]
-		# row = [str(i), str(mergeSortduration), str(quickSortduration)]
-		# with open("real_results_1000s.csv", 'a', newline='') as f:
-		# 	writer = csv.writer(f)
-		# 	writer.writerow(row)
+		
 
 def getinput():
 	array = []
@@ -300,5 +263,4 @@ if __name__ == "__main__":
 		exit()
 
 	Hsorted = HeapSort(A)
-	# print("Sorted")
 	print(Hsorted)
