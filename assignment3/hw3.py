@@ -134,13 +134,13 @@ def sortedData(num):
 def dataMode():
 	points = 1000
 	# points = [1, 10, 50, 100, 500, 1000, 1500, 2000, 2500, 5000, 10000, 15000]
-	with open("2real_results_1000r.csv", 'w', newline='') as f:
+	with open("real_results_1000r.csv", 'w', newline='') as f:
 		row = ["n","heapSort", "mergeSort", "quickSort"]
 		# row = ["n", "mergeSort", "quickSort"]
 		writer = csv.writer(f)
 		writer.writerow(row)
 
-	with open("2real_results_1000s.csv", 'w', newline='') as f:
+	with open("real_results_1000s.csv", 'w', newline='') as f:
 		row = ["n","heapSort", "mergeSort", "quickSort"]
 		# row = ["n", "mergeSort", "quickSort"]
 		writer = csv.writer(f)
@@ -190,13 +190,13 @@ def dataMode():
 	
 		
 
-		with open("2real_results_1000r.csv", 'a', newline='') as f:
+		with open("real_results_1000r.csv", 'a', newline='') as f:
 			row = [str(i), str(RandomHeapSortDuration), str(RandomMergeSortDuration), str(RandomQuickSortDuration)]
 			# row = [str(i), str(RandomMergeSortDuration), str(RandomQuickSortDuration)]
 			writer = csv.writer(f)
 			writer.writerow(row)
 
-		with open("2real_results_1000s.csv", 'a', newline='') as f:
+		with open("real_results_1000s.csv", 'a', newline='') as f:
 			row = [str(i), str(SortedHeapSortDuration), str(SortedMergeSortDuration), str(SortedQuickSortDuration)]
 			# row = [str(i), str(SortedMergeSortDuration), str(SortedQuickSortDuration)]
 			writer = csv.writer(f)
