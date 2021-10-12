@@ -12,19 +12,21 @@ import time
 def Maxheapify(A, i):
 	left = int(2*i+1)
 	right = int(2*i+2)
-	
+
+	#Check if leaf node	
 	if(left >= len(A)):
 		return A
 
-	elif(right >= len(A)):
-		if(A[i] < A[left]):
-			A[i], A[left] = A[left], A[i]
-			A = Maxheapify(A, left)
-
+	#Check if there is a right leaf and the left leaf is greater than current node
+	elif((right >= len(A)) and (A[i] < A[left]) ):
+		A[i], A[left] = A[left], A[i]
+		A = Maxheapify(A, left)
+	
+	#Check if left leaf if greater than current node and right leaf
 	elif((A[i] < A[left]) and (A[left] >= A[right])):
 		A[i], A[left] = A[left], A[i]
 		A = Maxheapify(A, left)
-
+	#Check if right leaf is greater than current node and left leaf
 	elif((A[i] < A[right]) and (A[right] > A[left])):
 		A[i], A[right] = A[right], A[i]
 		A = Maxheapify(A, right)
