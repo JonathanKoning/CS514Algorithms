@@ -18,9 +18,10 @@ def Maxheapify(A, i):
 		return A
 
 	#Check if there is not a right leaf and the left leaf is greater than current node
-	elif((right >= len(A)) and (A[i] < A[left]) ):
-		A[i], A[left] = A[left], A[i]
-		A = Maxheapify(A, left)
+	elif(right >= len(A)):
+		if(A[i] < A[left]):
+			A[i], A[left] = A[left], A[i]
+			A = Maxheapify(A, left)
 	
 	#Check if left leaf if greater than current node and right leaf
 	elif((A[i] < A[left]) and (A[left] >= A[right])):
@@ -46,11 +47,11 @@ def BuildMaxHeap(A):
 def HeapSort(A):
 	A = BuildMaxHeap(A)						#O(n)
 	s = len(A)
-	n = len(A)-1
+	# n = len(A)-1
 	while(s > 1): 							#O(n)
-		A[0], A[n] = A[n], A[0]
+		A[0], A[s-1] = A[s-1], A[0]
 		s-=1
-		n-=1
+		# n-=1
 		A = Maxheapify(A[:s], 0) + A[s:]	#O(log n)
 
 	return A
