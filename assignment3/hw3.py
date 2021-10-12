@@ -9,28 +9,28 @@ import time
 #if i violates the heap property, i.e., smaller than one of its children:
 # exchange A[i] with Max(A[Left[i], A[Right[i]]).
 # recusrsively call Maxheapify on A,j where A[j] and A[i] have just been exchanged
-def Maxheapify(A, i):
+def Maxheapify(A, n, i):
 	left = int(2*i+1)
 	right = int(2*i+2)
 
 	#Check if leaf node	
-	if(left >= len(A)):
+	if(left >= n):
 		return A
 
 	#Check if there is not a right leaf and the left leaf is greater than current node
-	elif(right >= len(A)):
+	elif(right >= n):
 		if(A[i] < A[left]):
 			A[i], A[left] = A[left], A[i]
-			A = Maxheapify(A, left)
+			A = Maxheapify(A, n, left)
 	
 	#Check if left leaf if greater than current node and right leaf
 	elif((A[i] < A[left]) and (A[left] >= A[right])):
 		A[i], A[left] = A[left], A[i]
-		A = Maxheapify(A, left)
+		A = Maxheapify(A, n, left)
 	#Check if right leaf is greater than current node and left leaf
 	elif((A[i] < A[right]) and (A[right] > A[left])):
 		A[i], A[right] = A[right], A[i]
-		A = Maxheapify(A, right)
+		A = Maxheapify(A, n, right)
 	# print(A)
 	return A
 
@@ -39,21 +39,23 @@ def BuildMaxHeap(A):
 	i = int(math.floor((N-1)/2))
 
 	while(i >= 0): 				#n/2
-		A = Maxheapify(A, i)	#log(n)
+		A = Maxheapify(A, N, i)	#log(n)
 		i-=1
 
 	return A
 
 def HeapSort(A):
 	A = BuildMaxHeap(A)						#O(n)
+	# print(A)
 	s = len(A)
 	# n = len(A)-1
 	while(s > 1): 							#O(n)
 		A[0], A[s-1] = A[s-1], A[0]
 		s-=1
 		# n-=1
-		A = Maxheapify(A[:s], 0) + A[s:]	#O(log n)
-
+		#Weird memory allocation
+		# A = Maxheapify(A[:s], 0) + A[s:]	#O(log n)
+		A = Maxheapify(A, s,0)
 	return A
 
 
@@ -128,13 +130,13 @@ def sortedData(num):
 def dataMode():
 	points = 1000
 	# points = [1, 10, 50, 100, 500, 1000, 1500, 2000, 2500, 5000, 10000, 15000]
-	with open("real_results_1000r.csv", 'w', newline='') as f:
+	with open("mem_results_1000r.csv", 'w', newline='') as f:
 		row = ["n","heapSort", "mergeSort", "quickSort"]
 		# row = ["n", "mergeSort", "quickSort"]
 		writer = csv.writer(f)
 		writer.writerow(row)
 
-	with open("real_results_1000s.csv", 'w', newline='') as f:
+	with open("mem_results_1000s.csv", 'w', newline='') as f:
 		row = ["n","heapSort", "mergeSort", "quickSort"]
 		# row = ["n", "mergeSort", "quickSort"]
 		writer = csv.writer(f)
@@ -184,13 +186,13 @@ def dataMode():
 	
 		
 
-		with open("real_results_1000r.csv", 'a', newline='') as f:
+		with open("mem_results_1000r.csv", 'a', newline='') as f:
 			row = [str(i), str(RandomHeapSortDuration), str(RandomMergeSortDuration), str(RandomQuickSortDuration)]
 			# row = [str(i), str(RandomMergeSortDuration), str(RandomQuickSortDuration)]
 			writer = csv.writer(f)
 			writer.writerow(row)
 
-		with open("real_results_1000s.csv", 'a', newline='') as f:
+		with open("mem_results_1000s.csv", 'a', newline='') as f:
 			row = [str(i), str(SortedHeapSortDuration), str(SortedMergeSortDuration), str(SortedQuickSortDuration)]
 			# row = [str(i), str(SortedMergeSortDuration), str(SortedQuickSortDuration)]
 			writer = csv.writer(f)
