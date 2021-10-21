@@ -6,7 +6,7 @@ import time
 
 solutions = 0
 #Backtrace search
-def B_Queens(board, row, n, solutions, total):
+def B_Queens_rec(board, row, n, solutions, total):
 	if(row == n):
 		return solutions, total
 	
@@ -41,15 +41,19 @@ def B_Queens(board, row, n, solutions, total):
 				# for i in range(n):
 				# 	print(board[i])
 				# print(board[row-1][j])
-			solutions, total = B_Queens(board,row+1, n, solutions, total)
+			solutions, total = B_Queens_rec(board,row+1, n, solutions, total)
 
 		board[row][j] = 0
 
 	return solutions, total
 
+def B_Queens(n):
+	board = createBoard(n)
+	solutions, total = B_Queens_rec(board, 0, n, 0, 0)
+	return solutions
 
 #Exhaustive search
-def E_Queens(board, row, n, solutions, total):
+def E_Queens_rec(board, row, n, solutions, total):
 	# print("B_Queens")
 	# for l in range(n):
 		# print(board[l])
@@ -86,10 +90,15 @@ def E_Queens(board, row, n, solutions, total):
 
 	for i in range(n):
 		board[row][i]=1
-		solutions, total = E_Queens(board, row+1, n, solutions, total)
+		solutions, total = E_Queens_rec(board, row+1, n, solutions, total)
 		board[row][i]=0
 
 	return solutions, total
+
+def E_Queens(n):
+	board = createBoard(n)
+	solutions, total = E_Queens_rec(board, 0, n, 0, 0)
+	return solutions
 
 def createBoard(n):
 	board = []
@@ -115,12 +124,12 @@ def dataMode():
 		board = createBoard(i)
 		
 		bstart = time.perf_counter()
-		bsolutions, btotal = B_Queens(board, 0, i, 0, 0)
+		bsolutions, btotal = B_Queens_rec(board, 0, i, 0, 0)
 		bstop = time.perf_counter()
 		bactraceTime = bstop-bstart
 
 		estart = time.perf_counter()
-		esolutions, etotal = E_Queens(board, 0, i, 0, 0)
+		esolutions, etotal = E_Queens_rec(board, 0, i, 0, 0)
 		estop = time.perf_counter()
 		exhaustiveTime = estop-estart
 
@@ -200,12 +209,14 @@ if __name__ == "__main__":
 	if(board == "datamode"):
 		exit()
 
-	solutions, total = E_Queens(board, 0, n, 0, 0)
+	# solutions, total = E_Queens(board, 0, n, 0, 0)
+	solutions = E_Queens(n)
 	print("E_Queens: ", solutions)
 	# print(solutions)
 	# print(total)
 
-	solutions, total = B_Queens(board, 0, n, 0, 0)
+	# solutions, total = B_Queens(board, 0, n, 0, 0)
+	solutions = B_Queens(n)
 	print("B_Queens: ", solutions)
 	# print(solutions)
 	# print(total)
