@@ -102,7 +102,7 @@ def createBoard(n):
 	return board
 
 def dataMode():
-	points = 9
+	points = 8
 	with open("results_8.csv", 'w', newline='') as f:
 		row = ["n","backtrace", "exhaustive", "Solutions"]
 		writer = csv.writer(f)
@@ -120,7 +120,7 @@ def dataMode():
 		bactraceTime = bstop-bstart
 
 		estart = time.perf_counter()
-		esolutions, etotal = B_Queens(board, 0, i, 0, 0)
+		esolutions, etotal = E_Queens(board, 0, i, 0, 0)
 		estop = time.perf_counter()
 		exhaustiveTime = estop-estart
 
@@ -165,7 +165,7 @@ def getinput():
 	
 	elif(sys.argv[1] == "-d"):
 		dataMode()
-		return "datamode"
+		return "datamode", 0
 
 	try:
 		n = int(sys.argv[1])
