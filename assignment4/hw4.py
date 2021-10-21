@@ -102,9 +102,9 @@ def createBoard(n):
 	return board
 
 def dataMode():
-	points = 8
+	points = 10
 	with open("results_8.csv", 'w', newline='') as f:
-		row = ["n","backtrace", "exhaustive", "Solutions"]
+		row = ["n","backtrace", "exhaustive", "Back_Nodes", "Exhaut_Nodes","Solutions"]
 		writer = csv.writer(f)
 		writer.writerow(row)
 
@@ -125,7 +125,7 @@ def dataMode():
 		exhaustiveTime = estop-estart
 
 		with open("results_8.csv", 'a', newline='') as f:
-			row = [str(i), str(bactraceTime), str(exhaustiveTime), str(btotal)]
+			row = [str(i), str(bactraceTime), str(exhaustiveTime), str(btotal), str(etotal), str(bsolutions)]
 			writer = csv.writer(f)
 			writer.writerow(row)
 
