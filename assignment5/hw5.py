@@ -16,12 +16,6 @@
 # Both initial and goal state is a 3x3 matrix represented by a Python list, from left to right, and from top to bottom, where the empty cell is represented by 0. For example, the start and goal states above would be represented as [1,2,3,4,5,6,8,7,0] and [1,2,3,8,0,4,7,6,5] respectively.
 # There might be multiple solutions (i.e. shortest path) for each problem, thus we ask you to return the length of the shortest path.
 
-import sys 
-import math
-import random
-import csv
-import time
-
 
 def ShortestPath(goal, states):
 	# print("ShortestPath")
@@ -29,20 +23,15 @@ def ShortestPath(goal, states):
 	inits = {}
 	for i in range(len(states)):
 		inits[str(states[i])] = 1000
-	
-
 	# print(inits)
 	dist = {}
 	level = 0
 	dist[str(goal)] = level
-	# print(str(goal))
 	Q = [goal]
 	i = 0
 	while len(Q) != 0 and i != len(states):
 		u = Q.pop(0)
-		# print("u: ",u)
-		# print(dist[str(u)])
-		# level += 1
+		stru = str(u)
 		#find all neighbors of u
 		#up, down, left, right
 		empty = u.index(0)
@@ -51,44 +40,46 @@ def ShortestPath(goal, states):
 			# print("Move empty up")
 			check = u[:]
 			check[empty], check[empty-3] = check[empty-3], check[empty]
-			# print('check: ', check)
-			if str(check) not in dist:
-				dist[str(check)] = dist[str(u)] + 1
-				if str(check) in inits:
-					inits[str(check)] = dist[str(u)] + 1
+			strcheck = str(check)
+			# if str(check) not in dist:
+			if strcheck not in dist:
+				dist[strcheck] = dist[stru] + 1
+				if strcheck in inits:
+					inits[strcheck] = dist[stru] + 1
 					i+=1
 				Q.append(check)
 		#check if empty can move down
 		if(empty != 6 and empty != 7 and empty != 8):
-			# print("Move empty down")
 			check = u[:]
 			check[empty], check[empty+3] = check[empty+3], check[empty]
+			strcheck = str(check)
+			# if str(check) not in dist:
 			if str(check) not in dist:
-				dist[str(check)] = dist[str(u)] + 1
-				if str(check) in inits:
-					inits[str(check)] = dist[str(u)] + 1
+				dist[strcheck] = dist[stru] + 1
+				if strcheck in inits:
+					inits[strcheck] = dist[stru] + 1
 					i+=1
 				Q.append(check)
 		#check if empty can move left
 		if(empty != 0 and empty != 3 and empty != 6):
-			# print("Move empty down")
 			check = u[:]
 			check[empty], check[empty-1] = check[empty-1], check[empty]
-			if str(check) not in dist:
-				dist[str(check)] = dist[str(u)] + 1
-				if str(check) in inits:
-					inits[str(check)] = dist[str(u)] + 1
+			strcheck = str(check)
+			if strcheck not in dist:
+				dist[strcheck] = dist[stru] + 1
+				if strcheck in inits:
+					inits[strcheck] = dist[stru] + 1
 					i+=1
 				Q.append(check)
 		#Check if empty can move right
 		if(empty != 2 and empty != 5 and empty != 8):
-			# print("move empty right")
 			check = u[:]
 			check[empty], check[empty+1] = check[empty+1], check[empty]
-			if str(check) not in dist:
-				dist[str(check)] = dist[str(u)] + 1
-				if str(check) in inits:
-					inits[str(check)] = dist[str(u)] + 1
+			strcheck = str(check)
+			if strcheck not in dist:
+				dist[strcheck] = dist[stru] + 1
+				if strcheck in inits:
+					inits[strcheck] = dist[stru] + 1
 					i+=1
 				Q.append(check)
 
