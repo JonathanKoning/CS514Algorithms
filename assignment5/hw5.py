@@ -4,10 +4,10 @@
 
 # For example, the following problem can be solved in 8 moves: D, R, R, U, L, L, D, R.
 
-# start             goal
-# 1 2 3             1 2 3
-# 4 5 6  ==>    	8   4	
-# 8 7               7 6 5
+# start				goal
+# 1 2 3				1 2 3
+# 4 5 6  ==>		8	4	
+# 8 7				7 6 5
 
 # Your function should be called "ShortestPath", which takes a single goal state and a list of initial states as inputs, then return the list of lengths of the shortest paths from  the initial states to the goal (one per each initial state). Please note that the initial states may be ordered arbitrarily by the testing program. 
 # Your program uses single breadth first search to solve all problems by searching backwards from the goal and collects the solution lengths for all the initial states. Use hashing to check if a node has been already visited.
@@ -88,6 +88,13 @@ def ShortestPath(goal, states):
 					i+=1
 				Q.append(check)
 
-	
-	return list(inits.values())
+	values = []
+	for i in range(len(states)):
+		values.append(inits[str(states[i])])
+
+	#print(list(inits.keys()))
+	#print(states[0], inits[str(states[0])])
+	#values = list(inits.values())
+	#values.reverse()
+	return values
 		
