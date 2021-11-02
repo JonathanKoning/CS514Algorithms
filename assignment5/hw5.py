@@ -24,66 +24,72 @@ import time
 
 
 def ShortestPath(goal, states):
-	print("ShortestPath")
+	# print("ShortestPath")
 	
 	inits = {}
 	for i in range(len(states)):
 		inits[str(states[i])] = 1000
-		
+	
+
+	# print(inits)
 	dist = {}
 	level = 0
 	dist[str(goal)] = level
+	# print(str(goal))
 	Q = [goal]
 	i = 0
 	while len(Q) != 0 and i != len(states):
 		u = Q.pop(0)
-		level += 1
+		# print("u: ",u)
+		# print(dist[str(u)])
+		# level += 1
 		#find all neighbors of u
 		#up, down, left, right
 		empty = u.index(0)
 		#check if empty can move up
 		if(empty != 0 and empty != 1 and empty != 2):
-			print("Move empty up")
-			check = u
+			# print("Move empty up")
+			check = u[:]
 			check[empty], check[empty-3] = check[empty-3], check[empty]
+			# print('check: ', check)
 			if str(check) not in dist:
-				dist[str(check)] = level
+				dist[str(check)] = dist[str(u)] + 1
 				if str(check) in inits:
-					inits[str(check)] = level
-					i += 1
+					inits[str(check)] = dist[str(u)] + 1
+					i+=1
 				Q.append(check)
 		#check if empty can move down
-		if(empty != 6 and empty != 7 and empty != 7):
-			print("Move empty down")
-			check = u
+		if(empty != 6 and empty != 7 and empty != 8):
+			# print("Move empty down")
+			check = u[:]
 			check[empty], check[empty+3] = check[empty+3], check[empty]
 			if str(check) not in dist:
-				dist[str(check)] = level
+				dist[str(check)] = dist[str(u)] + 1
 				if str(check) in inits:
-					inits[str(check)] = level
-					i += 1
+					inits[str(check)] = dist[str(u)] + 1
+					i+=1
 				Q.append(check)
 		#check if empty can move left
 		if(empty != 0 and empty != 3 and empty != 6):
-			print("Move empty down")
-			check = u
+			# print("Move empty down")
+			check = u[:]
 			check[empty], check[empty-1] = check[empty-1], check[empty]
 			if str(check) not in dist:
-				dist[str(check)] = level
+				dist[str(check)] = dist[str(u)] + 1
 				if str(check) in inits:
-					inits[str(check)] = level
-					i += 1
+					inits[str(check)] = dist[str(u)] + 1
+					i+=1
 				Q.append(check)
 		#Check if empty can move right
 		if(empty != 2 and empty != 5 and empty != 8):
-			print("move empty right")
-			check = u
+			# print("move empty right")
+			check = u[:]
 			check[empty], check[empty+1] = check[empty+1], check[empty]
 			if str(check) not in dist:
-				dist[str(check)] = level
+				dist[str(check)] = dist[str(u)] + 1
 				if str(check) in inits:
-					inits[str(check)] = level
-					i += 1
+					inits[str(check)] = dist[str(u)] + 1
+					i+=1
 				Q.append(check)
 
 	values = []
