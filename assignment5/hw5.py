@@ -88,9 +88,6 @@ def ShortestPath(goal, states):
 					i+=1
 				Q.append(check)
 
-	values = []
-	for key in inits:
-		values.append(inits[key])
 	
-	return values
+	return list(inits.values())
 		
