@@ -71,7 +71,7 @@ def MST_Kruskel(graph):
 
 
 def MST_Prim(graph):
-	print("Prim")
+	# print("Prim")
 	# Ensure that the selected edges X form a single tree at every stage
 	# In every step, select the lightest (least weight) edge that connects to the tree 
 	# Add it to the tree and repeat
@@ -131,7 +131,7 @@ def MST_Prim(graph):
 		n = H.pop(0)
 		# print("n: ", n)
 		edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
-		print("edge: ", edge)
+		# print("edge: ", edge)
 		edge.sort(key=lambda y: y[2])
 		
 		if(len(edge) > 0):
