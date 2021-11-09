@@ -38,8 +38,6 @@ def MST_Kruskel(graph):
 	count = 0
 	#Sort the edges in E by weight
 	graph.sort(key=lambda y: y[2])
-	# print(graph)
-	# e = 0
 	for edge in graph:
 		# e+=1
 		u = edge[0]
@@ -50,8 +48,20 @@ def MST_Kruskel(graph):
 		if v not in V:
 			V.append(v)
 			parent, rank = makeset(v, parent, rank)
-		# if(len(X) == len(V)-1):
-		# 	break
+	# print(graph)
+	e = 0
+	for edge in graph:
+		e+=1
+		u = edge[0]
+		v = edge[1]
+		# if u not in V:
+		# 	V.append(u)
+		# 	parent, rank = makeset(u, parent, rank)
+		# if v not in V:
+		# 	V.append(v)
+		# 	parent, rank = makeset(v, parent, rank)
+		if(len(X) == len(V)-1):
+			break
 		pu = find(u,parent)
 		pv = find(v, parent)
 		if(pu != pv):
@@ -61,7 +71,7 @@ def MST_Kruskel(graph):
 			count += edge[2]
 			X.append((u,v))
 
-	# print(e)
+	print(e)
 	mst = (count, X)
 	return mst
 
