@@ -12,9 +12,9 @@ def find(x, parent):
 		x = parent[x]
 	return x
 
-def union(x, y, parent, rank):
-	Rx = find(x, parent)
-	Ry = find(y, parent)
+def union(Rx, Ry, parent, rank):
+	# Rx = find(x, parent)
+	# Ry = find(y, parent)
 	if(Rx == Ry):
 		return
 	if(rank[Rx] > rank[Ry]):
@@ -39,7 +39,9 @@ def MST_Kruskel(graph):
 	#Sort the edges in E by weight
 	graph.sort(key=lambda y: y[2])
 	# print(graph)
+	# e = 0
 	for edge in graph:
+		# e+=1
 		u = edge[0]
 		v = edge[1]
 		if u not in V:
@@ -48,12 +50,18 @@ def MST_Kruskel(graph):
 		if v not in V:
 			V.append(v)
 			parent, rank = makeset(v, parent, rank)
-		if(find(u, parent) != find(v, parent)):
+		# if(len(X) == len(V)-1):
+		# 	break
+		pu = find(u,parent)
+		pv = find(v, parent)
+		if(pu != pv):
 			# X.append((u, v))
-			parent, rank = union(u, v, parent, rank)
+			parent, rank = union(pu, pv, parent, rank)
 			# X[0] += edge[2]
 			count += edge[2]
 			X.append((u,v))
+
+	# print(e)
 	mst = (count, X)
 	return mst
 
@@ -115,17 +123,17 @@ def MST_Prim(graph):
 
 
 if __name__ == "__main__":
-	# X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	# print(X)
+	X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	print(X)
 
-	# X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	# print(X)
+	X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	print(X)
 
-	# X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	# print(X)
+	X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	print(X)
 
-	# X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	# print(X)
+	X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	print(X)
 
 	X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
 	print(X)
