@@ -79,45 +79,13 @@ def MST_Prim(graph):
 	# Justified by the cut property where 
 	# S = nodes in X
 	# V-S = nodes not in X
-	# cost = {}
-	# prev = {}
-	# w = {}
-	# E = []
 	X = []
 	S = []
-	# V = []
 	H = []
 	count = 0
 	#Create list of vertices and weights
 	#List of weights is ordered by smallest vertex to largest vertex
-	# for edge in graph:
-	# 	# print("edge")
-	# 	# print(edge)
-	# 	u = edge[0]
-	# 	v = edge[1]
-	# 	if u not in V:
-	# 		V.append(u)
-	# 		cost[u] = math.inf
-	# 		prev[u] = -1	
-	# 	if v not in V:
-	# 		V.append(v)
-	# 		cost[v] = math.inf
-	# 		prev[v] = -1
-		# if v < u:
-		# 	u, v = v, u
-		
-		# w[(u,v)] = edge[2]
-		# E.append((u,v))
-		
-	# for u in V:
-	# 	cost[u] = math.inf
-	# 	prev[u] = -1
 
-	# print(V)
-	# V.sort()
-	# print(V)
-	# cost[V[0]] = 0
-	# print(H)
 	graph.sort(key=lambda y: y[2])
 	
 	H.append(graph[0])
@@ -126,9 +94,9 @@ def MST_Prim(graph):
 	# H = [V[0]]
 	S.append(H[0][0])
 	S.append(H[0][1])
-	while len(H) != 0 and len(S) != len(V):
+	while len(H) != 0:
 		# print("H: ",H)
-		n = H.pop(0)
+		H.pop(0)
 		# print("n: ", n)
 		edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
 		# print("edge: ", edge)
@@ -147,82 +115,6 @@ def MST_Prim(graph):
 	mst = (count, X)
 	return mst
 	
-	
-	# while len(H) != 0:
-	# 	n = H.pop(0)
-	# 	print(n)
-	# 	e = [(u,v) for (u,v) in E if((u==n or v==n) and ((u in S and v not in S) or (u not in S and v in S)))] 
-	# 	print(e)
-	# 	minw = math.inf
-	# 	mine=[0]
-	# 	for (u, v) in e:
-			
-	# 		if(n == u):
-	# 			if cost[v] > w[(u,v)] and v not in S:
-	# 				cost[v] = w[(u,v)]
-	# 				if(w[u,v] < minw):
-	# 					minw = w[(u,v)]
-	# 					mine[0] = (u,v)
-	# 				# prev[v] = u
-	# 		# 		S.append(v)
-	# 		# 		H.append(v)
-	# 		if(n == v):
-	# 			if cost[u] > w[(u, v)] and u not in S:
-	# 				cost[u] = w[(u,v)]
-	# 				if(w[(u,v)] < minw):
-	# 					minw=w[(u,v)]
-	# 					mine[0] = (u,v)
-	# 		# 		prev[u] = v
-	# 		# 		S.append(u)
-	# 		# 		H.append(u)
-	# 	if(u not in S):
-	# 		S.append(mine[0][0])
-	# 		prev[u] = v
-	# 		H.append(u)
-	# 	if(v not in S):
-	# 		S.append(mine[0][1])
-	# 		prev[v] = u
-	# 		H.append(v)
-	# for key in prev:
-	# 	print(prev)
-	# 	# print(prev[key])
-	# 	# if(not prev[key]):
-	# 		# print(prev[key])
-	# 	if (prev[key] != -1):
-	# 		if ((prev[key], key) in E):
-	# 			X[0] += w[(prev[key], key)]
-	# 			X.append((prev[key], key))
-	# 		if ((key, prev[key]) in E):
-	# 			X[0] += w[(key, prev[key])]
-	# 			X.append((key, prev[key]))
-
-	# return X
-	# H.sort(key=lambda y: y[2])
-
-	# while(len(H) != 0):
-	# 	u = H.pop(0)
-	# 	u = u[]
-		
-
-	#Sort the edges in E by weight
-	# graph.sort(key=lambda y: y[2])
-	# H = [graph[0]]
-	# while(len(V) != 0):
-	# 	u = H[0][0]
-	# 	v = H[0][1]
-	# 	X[0] = H[0][2]
-	# 	X.append((u, v))
-	# 	if(u in V):
-	# 		V.pop(V.index())
-	# 	if(v in V):
-	# 		V.pop(V.index(v))
-
-
-		
-		# S.append(H[0][0])
-		# S.append(H[0][1])
-
-
 
 
 	
