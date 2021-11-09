@@ -49,9 +49,9 @@ def MST_Kruskel(graph):
 			V.append(v)
 			parent, rank = makeset(v, parent, rank)
 	# print(graph)
-	e = 0
+	# e = 0
 	for edge in graph:
-		e+=1
+		# e+=1
 		u = edge[0]
 		v = edge[1]
 		# if u not in V:
@@ -71,7 +71,7 @@ def MST_Kruskel(graph):
 			count += edge[2]
 			X.append((u,v))
 
-	print(e)
+	# print(e)
 	mst = (count, X)
 	return mst
 
@@ -108,7 +108,8 @@ def MST_Prim(graph):
 		# print("n: ", n)
 		# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		try:
-			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			# edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		except:
 			break
 		# print("edge: ", edge)
