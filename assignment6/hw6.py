@@ -39,11 +39,13 @@ def MST_Kruskel(graph):
 		# print(edge)
 		if edge[0] not in V:
 			V.append(edge[0])
+			parent, rank = makeset(edge[0], parent, rank)
 		if edge[1] not in V:
 			V.append(edge[1])
+			parent, rank = makeset(edge[1], parent, rank)
 	
-	for u in V:
-		parent, rank = makeset(u, parent, rank)
+	# for u in V:
+	# 	parent, rank = makeset(u, parent, rank)
 	# print("V")
 	# print(V)
 	# print("parent")
