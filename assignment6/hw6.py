@@ -34,30 +34,20 @@ def MST_Kruskel(graph):
 	#Represent each tree as a set of vertices
 	#Never add and edge (u,v) if u and v are in the same tree (same set).
 	V = []
-	# for edge in graph:
-	# 	# print("edge")
-	# 	# print(edge)
-	# 	if edge[0] not in V:
-	# 		V.append(edge[0])
-	# 		parent, rank = makeset(edge[0], parent, rank)
-	# 	if edge[1] not in V:
-	# 		V.append(edge[1])
-	# 		parent, rank = makeset(edge[1], parent, rank)
-	
 	X=[]
 	count = 0
 	#Sort the edges in E by weight
 	graph.sort(key=lambda y: y[2])
 	# print(graph)
 	for edge in graph:
-		if edge[0] not in V:
-			V.append(edge[0])
-			parent, rank = makeset(edge[0], parent, rank)
-		if edge[1] not in V:
-			V.append(edge[1])
-			parent, rank = makeset(edge[1], parent, rank)
 		u = edge[0]
 		v = edge[1]
+		if u not in V:
+			V.append(u)
+			parent, rank = makeset(u, parent, rank)
+		if v not in V:
+			V.append(v)
+			parent, rank = makeset(v, parent, rank)
 		if(find(u, parent) != find(v, parent)):
 			# X.append((u, v))
 			parent, rank = union(u, v, parent, rank)
@@ -98,19 +88,23 @@ def MST_Prim(graph):
 		# print("H: ",H)
 		H.pop(0)
 		# print("n: ", n)
-		edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
+		# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+		try:
+			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+		except:
+			break
 		# print("edge: ", edge)
-		edge.sort(key=lambda y: y[2])
+		# edge.sort(key=lambda y: y[2])
 		
 		if(len(edge) > 0):
-			if(edge[0][0] not in S):
-				S.append(edge[0][0])
-			elif(edge[0][1] not in S):
-				S.append(edge[0][1])
+			if(edge[0] not in S):
+				S.append(edge[0])
+			elif(edge[1] not in S):
+				S.append(edge[1])
 			
-			H.append(edge[0])
-			X.append((edge[0][0], edge[0][1]))
-			count+=edge[0][2]
+			H.append(edge)
+			X.append((edge[0], edge[1]))
+			count+=edge[2]
 	
 	mst = (count, X)
 	return mst
