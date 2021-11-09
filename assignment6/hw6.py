@@ -34,30 +34,28 @@ def MST_Kruskel(graph):
 	#Represent each tree as a set of vertices
 	#Never add and edge (u,v) if u and v are in the same tree (same set).
 	V = []
-	for edge in graph:
-		# print("edge")
-		# print(edge)
-		if edge[0] not in V:
-			V.append(edge[0])
-			parent, rank = makeset(edge[0], parent, rank)
-		if edge[1] not in V:
-			V.append(edge[1])
-			parent, rank = makeset(edge[1], parent, rank)
+	# for edge in graph:
+	# 	# print("edge")
+	# 	# print(edge)
+	# 	if edge[0] not in V:
+	# 		V.append(edge[0])
+	# 		parent, rank = makeset(edge[0], parent, rank)
+	# 	if edge[1] not in V:
+	# 		V.append(edge[1])
+	# 		parent, rank = makeset(edge[1], parent, rank)
 	
-	# for u in V:
-	# 	parent, rank = makeset(u, parent, rank)
-	# print("V")
-	# print(V)
-	# print("parent")
-	# print(parent)
-	# print("rank")
-	# print(rank)
 	X=[]
 	count = 0
 	#Sort the edges in E by weight
 	graph.sort(key=lambda y: y[2])
 	# print(graph)
 	for edge in graph:
+		if edge[0] not in V:
+			V.append(edge[0])
+			parent, rank = makeset(edge[0], parent, rank)
+		if edge[1] not in V:
+			V.append(edge[1])
+			parent, rank = makeset(edge[1], parent, rank)
 		u = edge[0]
 		v = edge[1]
 		if(find(u, parent) != find(v, parent)):
