@@ -14,8 +14,9 @@ def makeset(u):
 def find(x):
 	# start = time.perf_counter()
 	# print("find")
-	while(x != parent[x]):
-		x = parent[x]
+	u =x
+	while(u != parent[u]):
+		u = parent[u]
 	# end = time.perf_counter()
 	# adder[0] += (end-start)
 	 
@@ -50,26 +51,11 @@ def MST_Kruskel(graph):
 	count = 0
 	#Sort the edges in E by weight
 	# start = time.perf_counter()
-	graph.sort(key=lambda y: y[2])					#O(e log n)
+	sgraph = sorted(graph, key=lambda y: y[2])					#O(e log n)
 	# end = time.perf_counter()
 	# print(end - start)
 	# start = time.perf_counter()
-	# for edge in graph:								#O(e)
-	# 	# e+=1
-	# 	u = edge[0]
-	# 	v = edge[1]
-	# 	if u not in V:
-	# 		V.append(u)
-	# 		makeset(u)
-	# 	if v not in V:
-	# 		V.append(v)
-	# 		makeset(v)
-	# print(graph)
-	# e = 0
-	# end = time.perf_counter()
-	# print(end - start)
-	# start = time.perf_counter()
-	for edge in graph:									#O(e)
+	for edge in sgraph:								#O(e)
 		# e+=1
 		u = edge[0]
 		v = edge[1]
@@ -79,9 +65,24 @@ def MST_Kruskel(graph):
 		if v not in V:
 			V.append(v)
 			makeset(v)
+	# print(graph)
+	# e = 0
+	# end = time.perf_counter()
+	# print(end - start)
+	# start = time.perf_counter()
+	for edge in sgraph:									#O(e)
+		# e+=1
+		u = edge[0]
+		v = edge[1]
+		# if u not in V:
+		# 	V.append(u)
+		# 	makeset(u)
+		# if v not in V:
+		# 	V.append(v)
+		# 	makeset(v)
 		#X are the edges within the MST
-		# if(len(X) == len(V)-1):
-		# 	break
+		if(len(X) == len(V)-1):
+			break
 			
 		pu = find(u)								#O(log(n))
 		pv = find(v)							#O(log(n))
@@ -115,9 +116,10 @@ def MST_Prim(graph):
 	count = 0
 	#Create list of vertices and weights
 	#List of weights is ordered by smallest vertex to largest vertex
-
+	# start = time.perf_counter()
 	graph.sort(key=lambda y: y[2])
-	
+	# end = time.perf_counter()
+	# print(end - start)
 	# H.append(graph[0])
 	X.append((graph[0][0], graph[0][1]))
 	count += graph[0][2]
@@ -125,27 +127,48 @@ def MST_Prim(graph):
 	# H = [V[0]]
 	S.append(graph[0][0])
 	S.append(graph[0][1])
-	
-	while True:
-		# H.pop(0)
-		try:
-			#edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
-			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
-		except:
-			break
+	H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
+	# for edge in H:
+	# 	graph.remove(edge)
+	while len(H) != 0:
+		edge = H.pop(0)
+		if(edge[0] not in S):
+			S.append(edge[0])
+			
+		elif(edge[1] not in S):
+			S.append(edge[1])
+			
+		# H.append(edge)
+		X.append((edge[0], edge[1]))
+		# graph.remove(edge)
+		count+=edge[2]
+		H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
+		# for edge in J:
+		# 	graph.remove(edge)
+		
+		# H+=J
+		# H.sort(key=lambda y: y[2])
+		# try:
+		# 	#edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+		# 	# start = time.perf_counter()
+		# 	edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+		# 	# end = time.perf_counter()
+		# 	# print(end-start)
+		# except:
+		# 	break
 		#print("edge: ", edge)
 		# print("edge2: ", edge2)
 		
-		if(len(edge) > 0):
-			if(edge[0] not in S):
-				S.append(edge[0])
-			elif(edge[1] not in S):
-				S.append(edge[1])
+		# if(len(edge) > 0):
+		# 	if(edge[0] not in S):
+		# 		S.append(edge[0])
+		# 	elif(edge[1] not in S):
+		# 		S.append(edge[1])
 			
-			# H.append(edge)
-			X.append((edge[0], edge[1]))
-			graph.remove(edge)
-			count+=edge[2]
+		# 	# H.append(edge)
+		# 	X.append((edge[0], edge[1]))
+		# 	# graph.remove(edge)
+		# 	count+=edge[2]
 	
 	mst = (count, X)
 	#print(mst)
@@ -154,30 +177,44 @@ def MST_Prim(graph):
 	
 	
 testarr = []	
-for i in range(1, 100):
-	for j in range(1, 100):
-		for k in range(1, 100):
+for i in range(0, 100):
+	for j in range(0, 100):
+		for k in range(0, 5):
 			testarr.append((i,j,k))
 		
 			
 
 if __name__ == "__main__":
+	# print(len(testarr))
+	# start = time.perf_counter()
 	# MST_Kruskel(testarr)
+	# end = time.perf_counter()
+	# print(end - start)
+
 	# print("end testarr")
-	# X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	# print(X)
+	H = [1,2,3,4,5]
+	J = [0,9,8,7,6]
+	H+=J
+	print(H)
+	X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	print(X)
 
-	# X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	# print(X)
+	X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	print(X)
 
-	# X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	# print(X)
+	X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	print(X)
 
-	# X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	# print(X)
+	X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	print(X)
 
-	# X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
-	# print(X)
+	X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
+	print(X)
+
+	# start = time.perf_counter()
+	# MST_Prim(testarr)
+	# end = time.perf_counter()
+	# print(end - start)
 
 	X = MST_Prim(([(0,1,2), (2,0,5), (4,1,7), (0,3,3), (3,4,4), (1,3,1)]))
 	print(X)
