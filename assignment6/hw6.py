@@ -37,8 +37,8 @@ def MST_Kruskel(graph):
 	X=[]
 	count = 0
 	#Sort the edges in E by weight
-	graph.sort(key=lambda y: y[2])
-	for edge in graph:
+	graph.sort(key=lambda y: y[2])					#O(e log n)
+	for edge in graph:								#O(e)
 		# e+=1
 		u = edge[0]
 		v = edge[1]
@@ -50,7 +50,7 @@ def MST_Kruskel(graph):
 			parent, rank = makeset(v, parent, rank)
 	# print(graph)
 	# e = 0
-	for edge in graph:
+	for edge in graph:									#O(e)
 		# e+=1
 		u = edge[0]
 		v = edge[1]
@@ -62,11 +62,11 @@ def MST_Kruskel(graph):
 		# 	parent, rank = makeset(v, parent, rank)
 		if(len(X) == len(V)-1):
 			break
-		pu = find(u,parent)
-		pv = find(v, parent)
+		pu = find(u,parent)								#O(log(n))
+		pv = find(v, parent)							#O(log(n))
 		if(pu != pv):
 			# X.append((u, v))
-			parent, rank = union(pu, pv, parent, rank)
+			parent, rank = union(pu, pv, parent, rank) #O(1)
 			# X[0] += edge[2]
 			count += edge[2]
 			X.append((u,v))
@@ -99,6 +99,7 @@ def MST_Prim(graph):
 	H.append(graph[0])
 	X.append((H[0][0], H[0][1]))
 	count += H[0][2]
+	# print(count)
 	# H = [V[0]]
 	S.append(H[0][0])
 	S.append(H[0][1])
@@ -108,8 +109,8 @@ def MST_Prim(graph):
 		# print("n: ", n)
 		# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		try:
-			# edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
-			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		except:
 			break
 		# print("edge: ", edge)
