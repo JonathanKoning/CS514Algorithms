@@ -1,8 +1,10 @@
+from collections import deque
 import math
-
+import time 
 
 parent = {}
 rank = {}
+adder = [0]
 def makeset(u):
 	# print("makeset")
 	parent[u] = u
@@ -10,12 +12,17 @@ def makeset(u):
 	# return parent, rank
 
 def find(x):
+	# start = time.perf_counter()
 	# print("find")
 	while(x != parent[x]):
 		x = parent[x]
+	# end = time.perf_counter()
+	# adder[0] += (end-start)
+	 
 	return x
 
 def union(Rx, Ry):
+	# start = time.perf_counter()
 	# Rx = find(x, parent)
 	# Ry = find(y, parent)
 	if(Rx == Ry):
@@ -27,6 +34,8 @@ def union(Rx, Ry):
 		if(rank[Rx] == rank[Ry]):
 			rank[Ry] = rank[Ry] + 1
 
+	# end = time.perf_counter()
+	# adder[0] += (end-start)
 	# return parent, rank
 
 def MST_Kruskel(graph):
@@ -40,7 +49,11 @@ def MST_Kruskel(graph):
 	X=[]
 	count = 0
 	#Sort the edges in E by weight
+	# start = time.perf_counter()
 	graph.sort(key=lambda y: y[2])					#O(e log n)
+	# end = time.perf_counter()
+	# print(end - start)
+	# start = time.perf_counter()
 	for edge in graph:								#O(e)
 		# e+=1
 		u = edge[0]
@@ -53,11 +66,14 @@ def MST_Kruskel(graph):
 			makeset(v)
 	# print(graph)
 	# e = 0
+	# end = time.perf_counter()
+	# print(end - start)
+	# start = time.perf_counter()
 	for edge in graph:									#O(e)
 		# e+=1
 		u = edge[0]
 		v = edge[1]
-		
+		#X are the edges within the MST
 		if(len(X) == len(V)-1):
 			break
 			
@@ -69,7 +85,8 @@ def MST_Kruskel(graph):
 			# X[0] += edge[2]
 			count += edge[2]
 			X.append((u,v))
-
+	# end = time.perf_counter()
+	# print(end - start)
 	# print(e)
 	mst = (count, X)
 	return mst
@@ -102,6 +119,7 @@ def MST_Prim(graph):
 	# H = [V[0]]
 	S.append(graph[0][0])
 	S.append(graph[0][1])
+	
 	while True:
 		# H.pop(0)
 		try:
@@ -120,6 +138,7 @@ def MST_Prim(graph):
 			
 			# H.append(edge)
 			X.append((edge[0], edge[1]))
+			graph.remove(edge)
 			count+=edge[2]
 	
 	mst = (count, X)
@@ -128,24 +147,31 @@ def MST_Prim(graph):
 
 	
 	
-	
-
+testarr = []	
+for i in range(1, 100):
+	for j in range(1, 100):
+		for k in range(1, 100):
+			testarr.append((i,j,k))
+		
+			
 
 if __name__ == "__main__":
-	X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	print(X)
+	# MST_Kruskel(testarr)
+	# print("end testarr")
+	# X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	# print(X)
 
-	X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	print(X)
+	# X = MST_Kruskel(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	# print(X)
 
-	X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
-	print(X)
+	# X = MST_Prim(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
+	# print(X)
 
-	X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
-	print(X)
+	# X = MST_Prim(([(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]))
+	# print(X)
 
-	X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
-	print(X)
+	# X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
+	# print(X)
 
 	X = MST_Prim(([(0,1,2), (2,0,5), (4,1,7), (0,3,3), (3,4,4), (1,3,1)]))
 	print(X)
