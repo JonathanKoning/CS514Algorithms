@@ -20,7 +20,7 @@ def find(x):
 	# end = time.perf_counter()
 	# adder[0] += (end-start)
 	 
-	return x
+	return u
 
 def union(Rx, Ry):
 	# start = time.perf_counter()
