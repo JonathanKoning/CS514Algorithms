@@ -54,16 +54,16 @@ def MST_Kruskel(graph):
 	# end = time.perf_counter()
 	# print(end - start)
 	# start = time.perf_counter()
-	for edge in graph:								#O(e)
-		# e+=1
-		u = edge[0]
-		v = edge[1]
-		if u not in V:
-			V.append(u)
-			makeset(u)
-		if v not in V:
-			V.append(v)
-			makeset(v)
+	# for edge in graph:								#O(e)
+	# 	# e+=1
+	# 	u = edge[0]
+	# 	v = edge[1]
+	# 	if u not in V:
+	# 		V.append(u)
+	# 		makeset(u)
+	# 	if v not in V:
+	# 		V.append(v)
+	# 		makeset(v)
 	# print(graph)
 	# e = 0
 	# end = time.perf_counter()
@@ -73,9 +73,15 @@ def MST_Kruskel(graph):
 		# e+=1
 		u = edge[0]
 		v = edge[1]
+		if u not in V:
+			V.append(u)
+			makeset(u)
+		if v not in V:
+			V.append(v)
+			makeset(v)
 		#X are the edges within the MST
-		if(len(X) == len(V)-1):
-			break
+		# if(len(X) == len(V)-1):
+		# 	break
 			
 		pu = find(u)								#O(log(n))
 		pv = find(v)							#O(log(n))
