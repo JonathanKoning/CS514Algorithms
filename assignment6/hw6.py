@@ -82,7 +82,7 @@ def MST_Prim(graph):
 	# Ensure that the selected edges X form a single tree at every stage
 	# In every step, select the lightest (least weight) edge that connects to the tree 
 	# Add it to the tree and repeat
-	# Similar to Dijkstra’s algorithm except the priority queue is maintained by the weight of the edge that connects a node to the tree. 
+	# Similar to Dijkstra's algorithm except the priority queue is maintained by the weight of the edge that connects a node to the tree. 
 	# Justified by the cut property where 
 	# S = nodes in X
 	# V-S = nodes not in X
@@ -105,11 +105,11 @@ def MST_Prim(graph):
 	while True:
 		# H.pop(0)
 		try:
-			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
-			# edge2 = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+			#edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		except:
 			break
-		# print("edge: ", edge)
+		#print("edge: ", edge)
 		# print("edge2: ", edge2)
 		
 		if(len(edge) > 0):
@@ -122,11 +122,12 @@ def MST_Prim(graph):
 			X.append((edge[0], edge[1]))
 			count+=edge[2]
 	
-	# mst = (count, X)
-	return (count, X)
+	mst = (count, X)
+	#print(mst)
+	return mst
+
 	
-
-
+	
 	
 
 
