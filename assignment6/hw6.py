@@ -127,22 +127,25 @@ def MST_Prim(graph):
 	# H = [V[0]]
 	S.append(graph[0][0])
 	S.append(graph[0][1])
-	H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
+	H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 	# for edge in H:
 	# 	graph.remove(edge)
 	while len(H) != 0:
-		edge = H.pop(0)
-		if(edge[0] not in S):
-			S.append(edge[0])
+		
+		if(H[0] not in S):
+			S.append(H[0])
 			
-		elif(edge[1] not in S):
-			S.append(edge[1])
+		elif(H[1] not in S):
+			S.append(H[1])
 			
 		# H.append(edge)
-		X.append((edge[0], edge[1]))
+		X.append((H[0], H[1]))
 		# graph.remove(edge)
-		count+=edge[2]
-		H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))]
+		count+=H[2]
+		try:
+			H = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+		except:
+			break
 		# for edge in J:
 		# 	graph.remove(edge)
 		
@@ -192,10 +195,7 @@ if __name__ == "__main__":
 	# print(end - start)
 
 	# print("end testarr")
-	H = [1,2,3,4,5]
-	J = [0,9,8,7,6]
-	H+=J
-	print(H)
+	
 	X = MST_Kruskel(([(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]))
 	print(X)
 
