@@ -88,32 +88,29 @@ def MST_Prim(graph):
 	# V-S = nodes not in X
 	X = []
 	S = []
-	H = []
+	# H = []
 	count = 0
 	#Create list of vertices and weights
 	#List of weights is ordered by smallest vertex to largest vertex
 
 	graph.sort(key=lambda y: y[2])
 	
-	H.append(graph[0])
-	X.append((H[0][0], H[0][1]))
-	count += H[0][2]
+	# H.append(graph[0])
+	X.append((graph[0][0], graph[0][1]))
+	count += graph[0][2]
 	# print(count)
 	# H = [V[0]]
-	S.append(H[0][0])
-	S.append(H[0][1])
-	while len(H) != 0:
-		# print("H: ",H)
-		H.pop(0)
-		# print("n: ", n)
-		# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+	S.append(graph[0][0])
+	S.append(graph[0][1])
+	while True:
+		# H.pop(0)
 		try:
-			# edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
-			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			# edge2 = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		except:
 			break
 		# print("edge: ", edge)
-		# edge.sort(key=lambda y: y[2])
+		# print("edge2: ", edge2)
 		
 		if(len(edge) > 0):
 			if(edge[0] not in S):
@@ -121,7 +118,7 @@ def MST_Prim(graph):
 			elif(edge[1] not in S):
 				S.append(edge[1])
 			
-			H.append(edge)
+			# H.append(edge)
 			X.append((edge[0], edge[1]))
 			count+=edge[2]
 	
@@ -147,4 +144,7 @@ if __name__ == "__main__":
 	print(X)
 
 	X = MST_Prim(([(1,0,1), (0,2,6), (1,2,2), (1,3,3), (2,3,5), (3,4,2), (3,5,4), (4,5,3)]))
+	print(X)
+
+	X = MST_Prim(([(0,1,2), (2,0,5), (4,1,7), (0,3,3), (3,4,4), (1,3,1)]))
 	print(X)
