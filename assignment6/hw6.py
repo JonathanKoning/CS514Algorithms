@@ -1,18 +1,21 @@
 import math
 
-def makeset(u, parent, rank):
+
+parent = {}
+rank = {}
+def makeset(u):
 	# print("makeset")
 	parent[u] = u
 	rank[u] = 0
-	return parent, rank
+	# return parent, rank
 
-def find(x, parent):
+def find(x):
 	# print("find")
 	while(x != parent[x]):
 		x = parent[x]
 	return x
 
-def union(Rx, Ry, parent, rank):
+def union(Rx, Ry):
 	# Rx = find(x, parent)
 	# Ry = find(y, parent)
 	if(Rx == Ry):
@@ -24,12 +27,12 @@ def union(Rx, Ry, parent, rank):
 		if(rank[Rx] == rank[Ry]):
 			rank[Ry] = rank[Ry] + 1
 
-	return parent, rank
+	# return parent, rank
 
 def MST_Kruskel(graph):
 	# print("Kruskel")
-	parent = {}
-	rank = {} 
+	# parent = {}
+	# rank = {} 
 	#Key problem is to check if cycles are going to be formed by adding an edge.
 	#Represent each tree as a set of vertices
 	#Never add and edge (u,v) if u and v are in the same tree (same set).
@@ -44,29 +47,25 @@ def MST_Kruskel(graph):
 		v = edge[1]
 		if u not in V:
 			V.append(u)
-			parent, rank = makeset(u, parent, rank)
+			makeset(u)
 		if v not in V:
 			V.append(v)
-			parent, rank = makeset(v, parent, rank)
+			makeset(v)
 	# print(graph)
 	# e = 0
 	for edge in graph:									#O(e)
 		# e+=1
 		u = edge[0]
 		v = edge[1]
-		# if u not in V:
-		# 	V.append(u)
-		# 	parent, rank = makeset(u, parent, rank)
-		# if v not in V:
-		# 	V.append(v)
-		# 	parent, rank = makeset(v, parent, rank)
+		
 		if(len(X) == len(V)-1):
 			break
-		pu = find(u,parent)								#O(log(n))
-		pv = find(v, parent)							#O(log(n))
+			
+		pu = find(u)								#O(log(n))
+		pv = find(v)							#O(log(n))
 		if(pu != pv):
 			# X.append((u, v))
-			parent, rank = union(pu, pv, parent, rank) #O(1)
+			union(pu, pv) #O(1)
 			# X[0] += edge[2]
 			count += edge[2]
 			X.append((u,v))
@@ -109,8 +108,8 @@ def MST_Prim(graph):
 		# print("n: ", n)
 		# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		try:
-			edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
-			# edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
+			# edge = next(filter(lambda e: ((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)), graph))
+			edge = [e for e in graph if(((e[0] in S and e[1] not in S) or (e[0] not in S and e[1] in S)))][0]
 		except:
 			break
 		# print("edge: ", edge)
@@ -126,8 +125,8 @@ def MST_Prim(graph):
 			X.append((edge[0], edge[1]))
 			count+=edge[2]
 	
-	mst = (count, X)
-	return mst
+	# mst = (count, X)
+	return (count, X)
 	
 
 
