@@ -4,13 +4,75 @@ from graph_gen import generate_seq
 import heapdict
 
 
+
+def psuedoCode(s,t,graph):
+	print("psuedoCode")
+	globalFlow = 0
+	flow = {}
+	paths = []
+	E = []
+	#Capacity
+	C = {}
+	#Residual Network
+	Cf = {}
+	
+	#Set value of each node to 0
+	for u,v,l in graph:
+		C[str((u,v))] = l
+		if u not in flow:
+			flow[u] = 0
+		if v not in flow:
+			flow[v] = 0
+	flow[s] = math.inf
+	H = heapdict.heapdict(flow)
+	#Repeat until Stuck
+	
+	#### Find s-t path##################################################
+	#		Start from s and keep adding new edges of highest capacity until
+	#		you reach t.
+	#		Similar to Dijkstra's except choose nodes with highest additional
+	#		flow updated by:
+	#		Flow(v) <- Maxu[Min(flow(u), C(u,v))]
+	f = []
+	while t in H:
+		u = H.popitem()
+		print(u)
+		#find all neighbors v of u in E
+		E = [edge for edge in graph if edge[0] == u[0] and u[1] > 0]
+		if len(E) == 0:
+			break
+		for _,v,l in E:
+			if flow[v] < min(flow[u], C[str((u,v))]):
+				flow[v] = min(flow[u], C[str((u,v))])
+				H[v] = flow[v]
+				f.append((u,v, flow[v]))
+	
+	#### Increase its flow as much as possible
+
+	#### Construct residual network#####################################
+	#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
+	#		residual network with capacities:
+	#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
+	#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
+	#		Select a new flow in the residual netowrk and and it to previous flows
+	for u,v,c in f:
+		if c <= C[str((u,v))]:
+			Cf[str((u,v))] = C[str((u,v))] - c
+			flow[v] = Cf[str((u,v))]
+	H = heapdict.heapdict(flow)
+
+
+
 def Max_Flow_Fat(s, t, graph):
 	print("Fat")
 	globalFlow = 0
 	flow = {}
 	paths = []
 	V = []
+	#Capacity
 	C = {}
+	#Residual Network
+	CF = {}
 	for u,v,l in graph:
 		C[str((u,v))] = l
 		if u not in flow:
@@ -22,10 +84,17 @@ def Max_Flow_Fat(s, t, graph):
 	
 	flow[s] = math.inf
 	H = heapdict.heapdict(flow)
+	print(H[s])
 	X = []
-
-	#Find s-t path
+	print(C)
+	#Find s-t path##################################################
+	# Start from s and keep adding new edges f highest capacity until
+	# you reach t.
+	# Similar to Dijkstra's except choose nodes with highest additional
+	# flow updated by:
+	# Flow(v) <- Maxu[Min(flow(u), C(u,v))]
 	# path = []
+	i = 0
 	while True:
 		parent = {}
 		if(t not in H):
@@ -37,7 +106,11 @@ def Max_Flow_Fat(s, t, graph):
 			print("m: ", m)
 			# print(graph)
 			#for all neighbors of m
-			x = [edge for edge in graph if edge[0] == m[0]]
+			x = [edge for edge in graph if edge[0] == m[0] and C[str((edge[0], edge[1]))]>0]
+			print("x: ", x)
+			# if(len(x) == 0):
+			# 	i = 1
+			# 	break
 			# print("x: ", x)
 			for u,v,l in x:
 				# print(v)
@@ -45,26 +118,36 @@ def Max_Flow_Fat(s, t, graph):
 					flow[v] = min(flow[u], C[str((u,v))])
 					H[v] = flow[v]
 					parent[v] = u
-		
-		#increase the flow as much as possible
+		print("t was in H")
+		# if(i != 0):
+		#increase the flow as much as possible##########################
 		parent["total"] = flow[t]
 		globalFlow += flow[t]
+		print(parent)
+		print(globalFlow)
+		# break
 		
 		paths.append(parent)
 		
 		
-		#form residual network
+		#form residual network##########################################
+		#Given a flow f and a Flow network G=(V,E,C,s,t), define a
+		#residual network with capacities:
+		#Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
+		#		 = f(u,v) if (u,v) within E and f(v,u)>u [reverse flow]
+		#Select a new flow in the residual netowrk and and it to previous flows
+
 		#capacity - flow along s-t path
 		for key in parent:
 			if key != "total":
 				C[str((parent[key], key))] = C[str((parent[key], key))] - parent["total"]
 		# for u,v,l in graph:
 		# 	flow[v] = l - flow[v]
-
+		print(C)
 		#Remove edge from graph if capacity == 0
-		for u,v,l in graph:
-			if C[str((u,v))] == 0:
-				graph.remove((u,v,l))
+		# for u,v,l in graph:
+		# 	if C[str((u,v))] == 0:
+		# 		graph.remove((u,v,l))
 		
 		#reset flow chart
 		for key in flow:
@@ -77,7 +160,7 @@ def Max_Flow_Fat(s, t, graph):
 	# 	print(H.popitem())
 	# print(flow[t])
 	# print(flow)
-	print()
+	print(globalFlow)
 
 def Max_Flow_Short(s, t, graph):
 	print("Short")
@@ -98,4 +181,5 @@ if __name__ == "__main__":
 		graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
 		s = 0
 		t = 3
-		Max_Flow_Fat(s, t, graph)
+		# Max_Flow_Fat(s, t, graph)
+		psuedoCode(s, t, graph)
