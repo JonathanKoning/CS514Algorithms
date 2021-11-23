@@ -110,17 +110,60 @@ def Max_Flow_Short(s, t, graph):
 	flow[s] = math.inf
 
 	H = []
-	H.append[s]
+	H.append(s)
 	stuck = 0
 	while stuck == 0:
 		parent = {}
+		stuck = 1
 		#Breadth first search
 		while len(H) != 0:
 			u = H.pop()
-			E = [edge for edge in graph if edge[0] == u[0] and C[str((u[0],edge[1]))] > 0]
+			if(u == t):
+				stuck = 0
+			E = [edge for edge in graph if edge[0] == u and C[str((u,edge[1]))] > 0]
 			for _,v,l in E:
-				
+				if flow[v] < min(flow[u], C[str((u,v))]):
+					flow[v] = min(flow[u], C[str((u,v))])
+					# H[v] = flow[v]
+					parent[v] = u
+					H.append(v)				
+		if(stuck != 0):
+			break
 
+		#### Construct residual network#####################################
+		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
+		#		residual network with capacities:
+		#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
+		#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
+		#		Select a new flow in the residual netowrk and and it to previous flows
+		globalFlow += flow[t]
+		p = parent[t]
+		c = t
+		bottleneck = flow[t]
+		parent[s] = -1
+		while c != s:
+			C[str((p,c))] = C[str((p,c))] - bottleneck
+			if(str((p,c)) in Cf):
+				Cf[str((p,c))] = Cf[str((p,c))] + bottleneck
+			else:
+				Cf[str((p,c))] = bottleneck
+			c = p
+			p = parent[c]
+
+		#reset flow to 0		
+		for key in flow:
+			flow[key] = 0
+		flow[s] = math.inf
+		H.append(s)
+
+	f = []
+	for key in Cf:
+		e = tuple(map(int, key[1:-1].split(', ')))
+		f.append((e[0], e[1], Cf[key]))
+	f.sort(key=lambda y:y[0])
+	finalflow = (globalFlow, f)
+
+	return finalflow
 
 if __name__ == "__main__":
 
@@ -141,4 +184,7 @@ if __name__ == "__main__":
 		t = 3
 		# Max_Flow_Fat(s, t, graph)
 		flow = Max_Flow_Fat(s, t, graph)
+		print(flow)
+
+		flow = Max_Flow_Short(s, t, graph)
 		print(flow)
