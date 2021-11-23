@@ -15,7 +15,7 @@ def psuedoCode(s,t,graph):
 	C = {}
 	#Residual Network
 	Cf = {}
-	
+	print("graph:\t", graph)
 	#Set value of each node to 0
 	for u,v,l in graph:
 		C[str((u,v))] = l
@@ -33,34 +33,61 @@ def psuedoCode(s,t,graph):
 	#		Similar to Dijkstra's except choose nodes with highest additional
 	#		flow updated by:
 	#		Flow(v) <- Maxu[Min(flow(u), C(u,v))]
-	f = []
-	while t in H:
-		u = H.popitem()
-		print(u)
-		#find all neighbors v of u in E
-		E = [edge for edge in graph if edge[0] == u[0] and u[1] > 0]
-		if len(E) == 0:
-			break
-		for _,v,l in E:
-			if flow[v] < min(flow[u], C[str((u,v))]):
-				flow[v] = min(flow[u], C[str((u,v))])
-				H[v] = flow[v]
-				f.append((u,v, flow[v]))
-	
-	#### Increase its flow as much as possible
+	stuck = 0
+	while stuck < 5:
+		f = {}
+		parent = {}
+		while t in H:
+			u = H.popitem()
+			# print(u)
+			#find all neighbors v of u in E
+			E = [edge for edge in graph if edge[0] == u[0] and C[str((u[0],edge[1]))] > 0]
+			print(E)
+			if len(E) == 0 and u[0] != t:
+				stuck = 1
+			for _,v,l in E:
+				if flow[v] < min(flow[u[0]], C[str((u[0],v))]):
+					flow[v] = min(flow[u[0]], C[str((u[0],v))])
+					H[v] = flow[v]
+					f[str((u[0],v))] = flow[v]
+					parent[v] = u[0]
+		#### Increase its flow as much as possible
+		stuck +=1
+		#### Construct residual network#####################################
+		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
+		#		residual network with capacities:
+		#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
+		#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
+		#		Select a new flow in the residual netowrk and and it to previous flows
+		p = parent[t]
+		c = t
+		bottleneck = flow[t]
+		parent[s] = -1
+		print(bottleneck)
+		print("C: ", C)
+		while c != s:
+			print("p: ", p)
+			print("c: ", c)
+			print("C[str((p,c))]: ", C[str((p,c))] )
+			C[str((p,c))] = C[str((p,c))] - bottleneck
+			print("Adjusted for bottleneck")
+			print("C[str((p,c))]: ", C[str((p,c))] )
+			# flow[c] = C[str((p,c))]
+			c = p
+			p = parent[c]
 
-	#### Construct residual network#####################################
-	#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
-	#		residual network with capacities:
-	#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
-	#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
-	#		Select a new flow in the residual netowrk and and it to previous flows
-	for u,v,c in f:
-		if c <= C[str((u,v))]:
-			Cf[str((u,v))] = C[str((u,v))] - c
-			flow[v] = Cf[str((u,v))]
-	H = heapdict.heapdict(flow)
+		print("C: ", C)
+		for key in flow:
+			flow[key] = 0
 
+		flow[s] = math.inf
+		# for key in f:
+		# 	if f[key] <= C[key]:
+		# 		Cf[key] = C[key] - f[key]
+		# 		flow[v] = Cf[key]
+		print("flow:\t",flow)
+		
+		H = heapdict.heapdict(flow)
 
 
 def Max_Flow_Fat(s, t, graph):
@@ -178,8 +205,9 @@ if __name__ == "__main__":
 		graph = generate_seq(5,5,5)
 
 	else:
-		graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
+		# graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
+		graph = [(0,1,10), (0,2,10), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
 		s = 0
-		t = 3
+		t = 5
 		# Max_Flow_Fat(s, t, graph)
 		psuedoCode(s, t, graph)
