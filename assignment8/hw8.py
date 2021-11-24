@@ -14,12 +14,12 @@ def Max_Flow_Fat(s,t,graph):
 	# paths = []
 	# E = []
 	#Capacity
-	C = {}
+	Capacity = {}
 	#Residual Network
 	Cf = {}
 	#Set value of each node to 0
 	for u,v,l in graph:
-		C[(u,v)] = l
+		Capacity[(u,v)] = l
 		if u not in flow:
 			flow[u] = 0
 		if v not in flow:
@@ -37,29 +37,30 @@ def Max_Flow_Fat(s,t,graph):
 	stuck = 0
 	while stuck == 0:
 		# f = {}
+		H = []
 		H = heapdict.heapdict(flow)
 		parent = {}
 		# print("##### New s-t path ################")
 		while t in H:
 			u = H.popitem()
-			# if(u[0] == t):
-			# 	break
+			
 			# Find all neighbors v of u in E with a positive capacity
-			E = [edge for edge in graph if edge[0] == u[0] and C[(u[0],edge[1])] > 0]
-			# if(u[1] == 0):
-			# 	print(E)
-			# If there are no neighbors, the current node is not t, and the flow of the next node is 0
-			# There is no path to t and so we are stuck 
-			# if len(E) == 0 and u[0] != t and H.peekitem()[1]==0:
+			E = [edge for edge in graph if edge[0] == u[0] and Capacity[(u[0],edge[1])] > 0]
+			
+			# If the current flow is zero, we have gotten stuck
 			if u[1] == 0 and H.peekitem()[1] == 0:
 				# print("stuck")
 				stuck = 1
 				break
 			for _,v,l in E:
 				# If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
-				if flow[v] < min(flow[u[0]], C[(u[0],v)]):
-					flow[v] = min(flow[u[0]], C[(u[0],v)])
+				if flow[v] < min(flow[u[0]], Capacity[(u[0],v)]):
+					# Update flow of v
+					# Increase it's position in H
+					flow[v] = min(flow[u[0]], Capacity[(u[0],v)])
 					H[v] = flow[v]
+					
+					# Keep track of the parent of current node to follow path later
 					parent[v] = u[0]
 
 		if(stuck != 0):
@@ -69,12 +70,14 @@ def Max_Flow_Fat(s,t,graph):
 				f.append((key[0],key[1], Cf[key]))
 			f.sort(key=lambda y:y[0])
 			finalflow = (globalFlow, f)
+			# print(Capacity)
 			return finalflow
 			# break
 
 		#### Increase its flow as much as possible
 		globalFlow += flow[t]
-
+		# print("flow[t]: ", flow[t])
+		# print("globalFlow: ", globalFlow)
 		#### Construct residual network#####################################
 		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
 		#		residual network with capacities:
@@ -90,12 +93,16 @@ def Max_Flow_Fat(s,t,graph):
 		# 	graph.sort(key=lambda y:y[2])
 		# 	print("Min edge in graph: ", graph[0][2])
 		# 	exit()
+
+		#Follow path starting at t
 		p = parent[t]
 		c = t
 		bottleneck = flow[t]
 		parent[s] = -1
 		while c != s:
-			C[(p,c)] = C[(p,c)] - bottleneck
+			Capacity[(p,c)] = Capacity[(p,c)] - bottleneck
+			if((Capacity[(p,c)]) < 0):
+				print(Capacity[(p,c)])
 			if((p,c) in Cf):
 				Cf[(p,c)] = Cf[(p,c)] + bottleneck
 			else:
@@ -117,7 +124,7 @@ def Max_Flow_Fat(s,t,graph):
 		f.append((key[0],key[1], Cf[key]))
 	f.sort(key=lambda y:y[0])
 	finalflow = (globalFlow, f)
-
+	print(Capacity)
 	return finalflow
 
 
@@ -146,6 +153,8 @@ def Max_Flow_Short(s, t, graph):
 	while stuck == 0:
 		parent = {}
 		stuck = 1
+		H = []
+		H.append(s)
 		#### Find s-t path##################################################
 		#Breadth first search
 		foundt = 0
@@ -154,7 +163,7 @@ def Max_Flow_Short(s, t, graph):
 			if(u == t):
 				stuck = 0
 				break
-			E = [edge for edge in graph if edge[0] == u and C[(u,edge[1])] > 0]
+			E = [edge for edge in graph if (edge[0] == u and C[(u,edge[1])] > 0)]
 			for _,v,l in E:
 				if flow[v] < min(flow[u], C[(u,v)]):
 					flow[v] = min(flow[u], C[(u,v)])
@@ -168,7 +177,15 @@ def Max_Flow_Short(s, t, graph):
 			# 	break				
 	
 		if(stuck != 0):
-			break
+			f = []
+			for key in Cf:
+				# e = tuple(map(int, key[1:-1].split(', ')))
+				f.append((key[0], key[1], Cf[key]))
+			f.sort(key=lambda y:y[0])
+			finalflow = (globalFlow, f)
+
+			return finalflow
+			#break
 
 		#### Construct residual network#####################################
 		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
@@ -181,8 +198,12 @@ def Max_Flow_Short(s, t, graph):
 		c = t
 		bottleneck = flow[t]
 		parent[s] = -1
+		# print("\nBottleneck:\t", bottleneck)
 		while c != s:
+			# print(p, "-", c)
+			# print("Cap before:\t", C[(p,c)])
 			C[(p,c)] = C[(p,c)] - bottleneck
+			# print("Cap after:\t", C[(p,c)])
 			if((p,c) in Cf):
 				Cf[(p,c)] = Cf[(p,c)] + bottleneck
 			else:
@@ -194,7 +215,7 @@ def Max_Flow_Short(s, t, graph):
 		for key in flow:
 			flow[key] = 0
 		flow[s] = 10000
-		H.append(s)
+		# H.append(s)
 
 	f = []
 	for key in Cf:
