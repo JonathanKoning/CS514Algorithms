@@ -6,8 +6,8 @@ import time
 
 
 def Max_Flow_Fat(s,t,graph):
-	graph.sort(key=lambda y:y[2])
-	print("Min edge in graph: ", graph[0][2])
+	# graph.sort(key=lambda y:y[2])
+	# print("Min edge in graph: ", graph[0][2])
 	# print("Max_Flow_Fat")
 	globalFlow = 0
 	flow = {}
@@ -39,21 +39,21 @@ def Max_Flow_Fat(s,t,graph):
 		# f = {}
 		H = heapdict.heapdict(flow)
 		parent = {}
-		print("##### New s-t path ################")
+		# print("##### New s-t path ################")
 		while t in H:
 			
 			u = H.popitem()
-			if(u[1] == 0):
-				print(u)
+			# if(u[1] == 0):
+			# 	print(u)
 			# Find all neighbors v of u in E with a positive capacity
 			E = [edge for edge in graph if edge[0] == u[0] and C[(u[0],edge[1])] > 0]
-			if(u[1] == 0):
-				print(E)
+			# if(u[1] == 0):
+			# 	print(E)
 			# If there are no neighbors, the current node is not t, and the flow of the next node is 0
 			# There is no path to t and so we are stuck 
 			# if len(E) == 0 and u[0] != t and H.peekitem()[1]==0:
 			if u[1] == 0 and H.peekitem()[1] == 0:
-				print("stuck")
+				# print("stuck")
 				stuck = 1
 				break
 			for _,v,l in E:
@@ -68,8 +68,8 @@ def Max_Flow_Fat(s,t,graph):
 					# if(v == t):
 					# 	print("New flow at t: ", flow[v])
 					# 	print("parent of t is: ", u[0])
-					if(flow[v] == 0):
-						print("New flow at: ", v, " is 0")
+					# if(flow[v] == 0):
+					# 	print("New flow at: ", v, " is 0")
 					H[v] = flow[v]
 					# f[str((u[0],v))] = flow[v]
 					parent[v] = u[0]
@@ -84,14 +84,15 @@ def Max_Flow_Fat(s,t,graph):
 		#		Select a new flow in the residual netowrk and and it to previous flows
 		# print(parent)
 		globalFlow += flow[t]
-		try:
-			p = parent[t]
-		except:
-			print(flow[t])
-			print("globalFlow: ", globalFlow)
-			graph.sort(key=lambda y:y[2])
-			print("Min edge in graph: ", graph[0][2])
-			exit()
+		# try:
+		# 	p = parent[t]
+		# except:
+		# 	print(flow[t])
+		# 	print("globalFlow: ", globalFlow)
+		# 	graph.sort(key=lambda y:y[2])
+		# 	print("Min edge in graph: ", graph[0][2])
+		# 	exit()
+		p = parent[t]
 		c = t
 		bottleneck = flow[t]
 		parent[s] = -1
@@ -110,7 +111,8 @@ def Max_Flow_Fat(s,t,graph):
 		flow[s] = 1
 		# H = heapdict.heapdict(flow)
 
-	#Put flow into proper format	
+	#Put flow into proper format
+	#This does not seem to affect the time	
 	f = []
 	for key in Cf:
 		# e = tuple(map(int, key[1:-1].split(', ')))
