@@ -2,7 +2,7 @@ import sys
 import math
 from graph_gen import generate_seq
 import heapdict
-
+import time
 
 
 def Max_Flow_Fat(s,t,graph):
@@ -39,12 +39,16 @@ def Max_Flow_Fat(s,t,graph):
 		while t in H:
 			u = H.popitem()
 			# print(u)
-			#find all neighbors v of u in E
+			#find all neighbors v of u in E with a positive capacity
 			E = [edge for edge in graph if edge[0] == u[0] and C[(u[0],edge[1])] > 0]
 			# print("E: ",E)
 			if len(E) == 0 and u[0] != t and H.peekitem()[1]==0:
+				print("stuck")
 				stuck = 1
 			for _,v,l in E:
+				# if(v == t):
+				# parent[v] = u[0]
+				#If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
 				if flow[v] < min(flow[u[0]], C[(u[0],v)]):
 					flow[v] = min(flow[u[0]], C[(u[0],v)])
 					H[v] = flow[v]
@@ -59,6 +63,7 @@ def Max_Flow_Fat(s,t,graph):
 		#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
 		#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
 		#		Select a new flow in the residual netowrk and and it to previous flows
+		# print(parent)
 		globalFlow += flow[t]
 		p = parent[t]
 		c = t
@@ -91,7 +96,7 @@ def Max_Flow_Fat(s,t,graph):
 
 
 def Max_Flow_Short(s, t, graph):
-	print("Short")
+	# print("Short")
 	globalFlow = 0
 	flow = {}
 	paths = []
@@ -115,12 +120,13 @@ def Max_Flow_Short(s, t, graph):
 	while stuck == 0:
 		parent = {}
 		stuck = 1
+		#### Find s-t path##################################################
 		#Breadth first search
 		while len(H) != 0:
 			u = H.pop()
 			if(u == t):
 				stuck = 0
-			E = [edge for edge in graph if edge[0] == u and C[(u,edge[1])] > 0]
+			E = [edge for edge in graph if edge[0] == u ]
 			for _,v,l in E:
 				if flow[v] < min(flow[u], C[(u,v)]):
 					flow[v] = min(flow[u], C[(u,v)])
@@ -177,14 +183,33 @@ if __name__ == "__main__":
 		graph = generate_seq(5,5,5)
 
 	else:
-		graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
-		# graph = [(0,1,10), (0,2,20), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
+		# graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
+		graph = [(0,1,10), (0,2,20), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
 		# graph = [(0,1,10),(0,2,10), (1,2,10),(1,3,10), (2,3,10)]
 		s = 0
-		t = 3
+		t = 5
 		# Max_Flow_Fat(s, t, graph)
 		flow = Max_Flow_Fat(s, t, graph)
 		print(flow)
 
 		flow = Max_Flow_Short(s, t, graph)
 		print(flow)
+
+
+		#Large Test case, This should have a max flow of 440
+		#Must complete in under 4 seconds
+		dense_tuples1 = generate_seq(100, 5000, 1)
+		
+		def maxG(G): return max([max(x[0], x[1]) for x in G])
+		start = time.perf_counter()
+		flow = Max_Flow_Fat(0, maxG(dense_tuples1), dense_tuples1)
+		stop = time.perf_counter()
+		print("Time: ", stop-start)
+		print("max flow: ", flow[0])
+
+
+		start = time.perf_counter()
+		flow = Max_Flow_Short(0, maxG(dense_tuples1), dense_tuples1)
+		stop = time.perf_counter()
+		print("Time: ", stop-start)
+		print("max flow: ", flow[0])
