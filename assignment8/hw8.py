@@ -11,7 +11,7 @@ def Max_Flow_Fat(s,t,graph):
 	# print("Max_Flow_Fat")
 	globalFlow = 0
 	flow = {}
-	paths = []
+	# paths = []
 	# E = []
 	#Capacity
 	C = {}
@@ -43,8 +43,8 @@ def Max_Flow_Fat(s,t,graph):
 		while t in H:
 			
 			u = H.popitem()
-			# if(u[1] == 0):
-			# 	print(u)
+			if(u[0] == t):
+				break
 			# Find all neighbors v of u in E with a positive capacity
 			E = [edge for edge in graph if edge[0] == u[0] and C[(u[0],edge[1])] > 0]
 			# if(u[1] == 0):
@@ -154,6 +154,7 @@ def Max_Flow_Short(s, t, graph):
 			u = H.pop()
 			if(u == t):
 				stuck = 0
+				break
 			E = [edge for edge in graph if edge[0] == u ]
 			for _,v,l in E:
 				if flow[v] < min(flow[u], C[(u,v)]):
