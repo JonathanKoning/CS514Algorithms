@@ -41,10 +41,9 @@ def Max_Flow_Fat(s,t,graph):
 		parent = {}
 		# print("##### New s-t path ################")
 		while t in H:
-			
 			u = H.popitem()
-			if(u[0] == t):
-				break
+			# if(u[0] == t):
+			# 	break
 			# Find all neighbors v of u in E with a positive capacity
 			E = [edge for edge in graph if edge[0] == u[0] and C[(u[0],edge[1])] > 0]
 			# if(u[1] == 0):
@@ -57,33 +56,32 @@ def Max_Flow_Fat(s,t,graph):
 				stuck = 1
 				break
 			for _,v,l in E:
-				# if(v == t):
-				# 	print("flow at t: ", flow[v])
-				# 	print("flow at u: ", flow[u[0]])
-				# 	print("Capacity at u-t: ", C[(u[0],v)])
-				# parent[v] = u[0]
 				# If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
 				if flow[v] < min(flow[u[0]], C[(u[0],v)]):
 					flow[v] = min(flow[u[0]], C[(u[0],v)])
-					# if(v == t):
-					# 	print("New flow at t: ", flow[v])
-					# 	print("parent of t is: ", u[0])
-					# if(flow[v] == 0):
-					# 	print("New flow at: ", v, " is 0")
 					H[v] = flow[v]
-					# f[str((u[0],v))] = flow[v]
 					parent[v] = u[0]
-		#### Increase its flow as much as possible
+
 		if(stuck != 0):
-			break
+			f = []
+			for key in Cf:
+			# e = tuple(map(int, key[1:-1].split(', ')))
+				f.append((key[0],key[1], Cf[key]))
+			f.sort(key=lambda y:y[0])
+			finalflow = (globalFlow, f)
+			return finalflow
+			# break
+
+		#### Increase its flow as much as possible
+		globalFlow += flow[t]
+
 		#### Construct residual network#####################################
 		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
 		#		residual network with capacities:
 		#		Cf(u,v) = C(u,v) - f(u,v) if f(u,v) <= C(u,v) and (u,v) within E
 		#				= f(v,u) if (v,u) within E and f(v,u)>u [reverse flow]
 		#		Select a new flow in the residual netowrk and and it to previous flows
-		# print(parent)
-		globalFlow += flow[t]
+		
 		# try:
 		# 	p = parent[t]
 		# except:
@@ -108,7 +106,7 @@ def Max_Flow_Fat(s,t,graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = 1000000
+		flow[s] = 10000
 		# H = heapdict.heapdict(flow)
 
 	#Put flow into proper format
@@ -156,7 +154,7 @@ def Max_Flow_Short(s, t, graph):
 			if(u == t):
 				stuck = 0
 				break
-			E = [edge for edge in graph if edge[0] == u ]
+			E = [edge for edge in graph if edge[0] == u and C[(u,edge[1])] > 0]
 			for _,v,l in E:
 				if flow[v] < min(flow[u], C[(u,v)]):
 					flow[v] = min(flow[u], C[(u,v)])
@@ -195,7 +193,7 @@ def Max_Flow_Short(s, t, graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = 100000
+		flow[s] = 10000
 		H.append(s)
 
 	f = []
