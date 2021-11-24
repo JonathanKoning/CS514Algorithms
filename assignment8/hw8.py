@@ -24,7 +24,7 @@ def Max_Flow_Fat(s,t,graph):
 			flow[u] = 0
 		if v not in flow:
 			flow[v] = 0
-	flow[s] = 1
+	flow[s] = 10000
 	# H = heapdict.heapdict(flow)
 	#Repeat until Stuck
 	
@@ -108,7 +108,7 @@ def Max_Flow_Fat(s,t,graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = 1
+		flow[s] = 1000000
 		# H = heapdict.heapdict(flow)
 
 	#Put flow into proper format
@@ -127,7 +127,7 @@ def Max_Flow_Short(s, t, graph):
 	# print("Short")
 	globalFlow = 0
 	flow = {}
-	paths = []
+	# paths = []
 	# E = []
 	#Capacity
 	C = {}
@@ -140,7 +140,7 @@ def Max_Flow_Short(s, t, graph):
 			flow[u] = 0
 		if v not in flow:
 			flow[v] = 0
-	flow[s] = 1
+	flow[s] = 10000
 
 	H = []
 	H.append(s)
@@ -150,6 +150,7 @@ def Max_Flow_Short(s, t, graph):
 		stuck = 1
 		#### Find s-t path##################################################
 		#Breadth first search
+		foundt = 0
 		while len(H) != 0:
 			u = H.pop()
 			if(u == t):
@@ -161,7 +162,13 @@ def Max_Flow_Short(s, t, graph):
 					flow[v] = min(flow[u], C[(u,v)])
 					# H[v] = flow[v]
 					parent[v] = u
-					H.append(v)				
+					H.append(v)
+					if(v == t):
+						foundt = 1
+						break
+			# if(foundt != 0):
+			# 	break				
+	
 		if(stuck != 0):
 			break
 
@@ -188,7 +195,7 @@ def Max_Flow_Short(s, t, graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = 1
+		flow[s] = 100000
 		H.append(s)
 
 	f = []
@@ -212,11 +219,24 @@ if __name__ == "__main__":
 		graph = generate_seq(5,5,5)
 
 	else:
-		# graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
-		graph = [(0,1,10), (0,2,20), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
+		graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
+		# graph = [(0,1,10), (0,2,20), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
 		# graph = [(0,1,10),(0,2,10), (1,2,10),(1,3,10), (2,3,10)]
 		s = 0
-		t = 5
+		t = 3
+		# Max_Flow_Fat(s, t, graph)
+		flow = Max_Flow_Fat(s, t, graph)
+		print(flow)
+
+		flow = Max_Flow_Short(s, t, graph)
+		print(flow)
+
+		# graph = [(0,1,1), (0,2,5), (1,2,1), (2,3,2), (1,3,6)]
+		# graph = [(0,1,10), (0,2,20), (1,2,2), (1,3,4), (1,4,8), (2,4,9), (3,5,10), (4,3,6), (4,5,10)]
+		# graph = [(0,1,10),(0,2,10), (1,2,10),(1,3,10), (2,3,10)]
+		graph = [(0, 1, 2), (0, 3, 6), (1, 2, 3), (1, 3, 8), (1, 4, 5), (2, 4, 7), (3, 4, 9)]
+		s = 0
+		t = 4
 		# Max_Flow_Fat(s, t, graph)
 		flow = Max_Flow_Fat(s, t, graph)
 		print(flow)
