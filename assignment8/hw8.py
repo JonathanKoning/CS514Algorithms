@@ -22,7 +22,7 @@ def Max_Flow_Fat(s,t,graph):
 			flow[u] = 0
 		if v not in flow:
 			flow[v] = 0
-	flow[s] = math.inf
+	flow[s] = 1
 	H = heapdict.heapdict(flow)
 	#Repeat until Stuck
 	
@@ -76,7 +76,7 @@ def Max_Flow_Fat(s,t,graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = math.inf
+		flow[s] = 1
 		H = heapdict.heapdict(flow)
 
 	#Put flow into proper format	
@@ -107,7 +107,7 @@ def Max_Flow_Short(s, t, graph):
 			flow[u] = 0
 		if v not in flow:
 			flow[v] = 0
-	flow[s] = math.inf
+	flow[s] = 1
 
 	H = []
 	H.append(s)
@@ -153,7 +153,7 @@ def Max_Flow_Short(s, t, graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = math.inf
+		flow[s] = 1
 		H.append(s)
 
 	f = []
