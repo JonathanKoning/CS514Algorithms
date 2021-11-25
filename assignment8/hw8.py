@@ -45,11 +45,11 @@ def Max_Flow_Fat(s,t,graph):
 	#		flow updated by:
 	#		Flow(v) <- Maxu[Min(flow(u), C(u,v))]
 	stuck = 0
-	H = []
-	H = heapdict.heapdict()
+	# H = []
+	# H = heapdict.heapdict()
 	while True:
-		# H = []
-		# H = heapdict.heapdict()
+		H = []
+		H = heapdict.heapdict()
 		H[s] = flow[s]
 		parent = {}
 		foundt = 0
@@ -85,7 +85,7 @@ def Max_Flow_Fat(s,t,graph):
 							break
 			if(foundt != 0):
 				break
-				
+
 		globalFlow += flow[t]
 		if(stuck != 0):
 			# f = []
@@ -173,10 +173,10 @@ def Max_Flow_Short(s, t, graph):
 			neighbors[v] = [u]
 		else:
 			neighbors[v] += [u]
-		if u not in flow:
-			flow[u] = 0
-		if v not in flow:
-			flow[v] = 0
+		# if u not in flow:
+		flow[u] = 0
+		# if v not in flow:
+		flow[v] = 0
 	flow[s] = 10000
 
 	stuck = 0
