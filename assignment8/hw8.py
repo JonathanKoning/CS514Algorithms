@@ -30,10 +30,10 @@ def Max_Flow_Fat(s,t,graph):
 			neighbors[v] = [u]
 		else:
 			neighbors[v] += [u]
-		if u not in flow:
-			flow[u] = 0
-		if v not in flow:
-			flow[v] = 0
+		# if u not in flow:
+		flow[u] = 0
+		# if v not in flow:
+		flow[v] = 0
 	flow[s] = 1<<30
 
 	#Repeat until Stuck
@@ -45,11 +45,14 @@ def Max_Flow_Fat(s,t,graph):
 	#		flow updated by:
 	#		Flow(v) <- Maxu[Min(flow(u), C(u,v))]
 	stuck = 0
+	H = []
+	H = heapdict.heapdict()
 	while True:
-		H = []
-		H = heapdict.heapdict()
+		# H = []
+		# H = heapdict.heapdict()
 		H[s] = flow[s]
 		parent = {}
+		foundt = 0
 		while len(H) != 0:
 			try:
 				u = H.popitem()
@@ -77,7 +80,12 @@ def Max_Flow_Fat(s,t,graph):
 						
 						# Keep track of the parent of current node to follow path later
 						parent[v] = u[0]
-
+						if(v == t):
+							foundt = 1
+							break
+			if(foundt != 0):
+				break
+				
 		globalFlow += flow[t]
 		if(stuck != 0):
 			# f = []
