@@ -143,6 +143,7 @@ def Max_Flow_Short(s, t, graph):
 	# Set value of each node to 0
 	for u,v,l in graph:
 		C[(u,v)] = l
+		C[(v,u)] = 0
 		if u not in flow:
 			flow[u] = 0
 		if v not in flow:
@@ -162,8 +163,9 @@ def Max_Flow_Short(s, t, graph):
 		while len(H) != 0:
 			u = H.pop()
 			# Find all neighbors v of u in E with a positive capacity
-			E = [edge for edge in graph if (edge[0] == u and C[(u,edge[1])] > 0)]
-			for _,v,l in E:
+			# E = [edge for edge in graph if (edge[0] == u and C[(u,edge[1])] > 0)]
+			E = [key for key in C if(key[0] == u and C[key] > 0)]
+			for _,v in E:
 				if flow[v] < min(flow[u], C[(u,v)]):
 					flow[v] = min(flow[u], C[(u,v)])
 					parent[v] = u
@@ -199,10 +201,11 @@ def Max_Flow_Short(s, t, graph):
 		parent[s] = -1
 		while c != s:
 			C[(p,c)] = C[(p,c)] - bottleneck
-			if((p,c) in Cf):
-				Cf[(p,c)] = Cf[(p,c)] + bottleneck
-			else:
-				Cf[(p,c)] = bottleneck
+			C[(c,p)] += bottleneck
+			# if((p,c) in Cf):
+			# 	Cf[(p,c)] = Cf[(p,c)] + bottleneck
+			# else:
+			# 	Cf[(p,c)] = bottleneck
 			c = p
 			p = parent[c]
 
