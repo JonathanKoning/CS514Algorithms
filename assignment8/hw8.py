@@ -17,10 +17,19 @@ def Max_Flow_Fat(s,t,graph):
 	#Residual Network
 	Cf = {}
 	
+	neighbors = {}
 	#Set value of each node to 0
 	for u,v,l in graph:
 		Capacity[(u,v)] = l # Original graph
 		Capacity[(v,u)] = 0 # Residual graph
+		if u not in neighbors:
+			neighbors[u] = [v]
+		else:
+			neighbors[u] += [v]
+		if v not in neighbors:
+			neighbors[v] = [u]
+		else:
+			neighbors[v] += [u]
 		if u not in flow:
 			flow[u] = 0
 		if v not in flow:
@@ -49,34 +58,36 @@ def Max_Flow_Fat(s,t,graph):
 			# print(u)
 			# Find all neighbors v of u in E with a positive capacity
 			# E = [edge for edge in graph if edge[0] == u[0] and Capacity[(u[0],edge[1])] > 0]
-			E = [key for key in Capacity if(key[0] == u[0] and Capacity[key] > 0)]
+			# E = [key for key in Capacity if(key[0] == u[0] and Capacity[key] > 0)]
 			
 			# If the current flow is zero, we have gotten stuck
-			# if u[1] == 0 and H.peekitem()[1] == 0:
-			# 	stuck = 1
-			# 	break
+			if u[1] == 0 and H.peekitem()[1] == 0:
+				stuck = 1
+				break
 
-			for _,v in E:
+			for v in neighbors[u[0]]:
 				# If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
-				if flow[v] < min(flow[u[0]], Capacity[(u[0],v)]):
-					# Update flow of v
-					# Increase it's position in H
-					flow[v] = min(flow[u[0]], Capacity[(u[0],v)])
-					H[v] = flow[v]
-					
-					# Keep track of the parent of current node to follow path later
-					parent[v] = u[0]
+				if(Capacity[(u[0], v)] > 0):
+					if flow[v] < min(flow[u[0]], Capacity[(u[0],v)]):
+						# Update flow of v
+						# Increase it's position in H
+						flow[v] = min(flow[u[0]], Capacity[(u[0],v)])
+						H[v] = flow[v]
+						
+						# Keep track of the parent of current node to follow path later
+						parent[v] = u[0]
 
+		globalFlow += flow[t]
 		if(stuck != 0):
-			f = []
-			for key in Cf:
-				f.append((key[0],key[1], Cf[key]))
-			f.sort(key=lambda y:y[0])
-			finalflow = (globalFlow, f)
+			# f = []
+			# for key in Cf:
+			# 	f.append((key[0],key[1], Cf[key]))
+			# f.sort(key=lambda y:y[0])
+			finalflow = (globalFlow, flow)
 			return finalflow
 
 		#### Increase its flow as much as possible
-		globalFlow += flow[t]
+		# globalFlow += flow[t]
 
 		if(flow[t] == 0):
 			return (globalFlow, flow)
@@ -140,10 +151,19 @@ def Max_Flow_Short(s, t, graph):
 	# Residual Network
 	Cf = {}
 	
+	neighbors = {}
 	# Set value of each node to 0
 	for u,v,l in graph:
 		C[(u,v)] = l
 		C[(v,u)] = 0
+		if u not in neighbors:
+			neighbors[u] = [v]
+		else:
+			neighbors[u] += [v]
+		if v not in neighbors:
+			neighbors[v] = [u]
+		else:
+			neighbors[v] += [u]
 		if u not in flow:
 			flow[u] = 0
 		if v not in flow:
@@ -164,27 +184,28 @@ def Max_Flow_Short(s, t, graph):
 			u = H.pop()
 			# Find all neighbors v of u in E with a positive capacity
 			# E = [edge for edge in graph if (edge[0] == u and C[(u,edge[1])] > 0)]
-			E = [key for key in C if(key[0] == u and C[key] > 0)]
-			for _,v in E:
-				if flow[v] < min(flow[u], C[(u,v)]):
-					flow[v] = min(flow[u], C[(u,v)])
-					parent[v] = u
-					H.append(v)
-					#If t has been found, the shortest s-t path has been found
-					if(v == t):
-						stuck = 0
-						foundt = 1
-						break
+			# E = [key for key in C if(key[0] == u and C[key] > 0)]
+			for v in neighbors[u]:
+				if(C[(u,v)] > 0):
+					if flow[v] < min(flow[u], C[(u,v)]):
+						flow[v] = min(flow[u], C[(u,v)])
+						parent[v] = u
+						H.append(v)
+						#If t has been found, the shortest s-t path has been found
+						if(v == t):
+							stuck = 0
+							foundt = 1
+							break
 			if(foundt != 0):
 				break				
 
 		globalFlow += flow[t]
 		if(stuck != 0):
-			f = []
-			for key in Cf:
-				f.append((key[0], key[1], Cf[key]))
-			f.sort(key=lambda y:y[0])
-			finalflow = (globalFlow, f)
+			# f = []
+			# for key in Cf:
+			# 	f.append((key[0], key[1], Cf[key]))
+			# f.sort(key=lambda y:y[0])
+			finalflow = (globalFlow, flow)
 
 			return finalflow
 
@@ -215,9 +236,7 @@ def Max_Flow_Short(s, t, graph):
 		flow[s] = 10000
 
 	f = []
-	for key in Cf:
-		f.append((key[0], key[1], Cf[key]))
-	f.sort(key=lambda y:y[0])
+	
 	finalflow = (globalFlow, f)
 
 	return finalflow
