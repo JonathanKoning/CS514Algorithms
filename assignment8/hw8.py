@@ -19,12 +19,13 @@ def Max_Flow_Fat(s,t,graph):
 	
 	#Set value of each node to 0
 	for u,v,l in graph:
-		Capacity[(u,v)] = l
+		Capacity[(u,v)] = l # Original graph
+		Capacity[(v,u)] = 0 # Residual graph
 		if u not in flow:
 			flow[u] = 0
 		if v not in flow:
 			flow[v] = 0
-	flow[s] = 10000
+	flow[s] = 1<<30
 
 	#Repeat until Stuck
 	
@@ -35,22 +36,27 @@ def Max_Flow_Fat(s,t,graph):
 	#		flow updated by:
 	#		Flow(v) <- Maxu[Min(flow(u), C(u,v))]
 	stuck = 0
-	while stuck == 0:
+	while True:
 		H = []
-		H = heapdict.heapdict(flow)
+		H = heapdict.heapdict()
+		H[s] = flow[s]
 		parent = {}
-		while t in H:
-			u = H.popitem()
+		while len(H) != 0:
+			try:
+				u = H.popitem()
+			except:
+				break
 			# print(u)
 			# Find all neighbors v of u in E with a positive capacity
-			E = [edge for edge in graph if edge[0] == u[0] and Capacity[(u[0],edge[1])] > 0]
+			# E = [edge for edge in graph if edge[0] == u[0] and Capacity[(u[0],edge[1])] > 0]
+			E = [key for key in Capacity if(key[0] == u[0] and Capacity[key] > 0)]
 			
 			# If the current flow is zero, we have gotten stuck
-			if u[1] == 0 and H.peekitem()[1] == 0:
-				stuck = 1
-				break
+			# if u[1] == 0 and H.peekitem()[1] == 0:
+			# 	stuck = 1
+			# 	break
 
-			for _,v,l in E:
+			for _,v in E:
 				# If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
 				if flow[v] < min(flow[u[0]], Capacity[(u[0],v)]):
 					# Update flow of v
@@ -71,6 +77,9 @@ def Max_Flow_Fat(s,t,graph):
 
 		#### Increase its flow as much as possible
 		globalFlow += flow[t]
+
+		if(flow[t] == 0):
+			return (globalFlow, flow)
 		#### Construct residual network#####################################
 		#		Given a flow f and a Flow network G=(V,E,C,s,t), define a
 		#		residual network with capacities:
@@ -88,18 +97,19 @@ def Max_Flow_Fat(s,t,graph):
 		# 	exit()
 
 		#Follow path starting at t
+		# print("parent: ", parent)
 		p = parent[t]
 		c = t
 		bottleneck = flow[t]
 		parent[s] = -1
 		while c != s:
 			Capacity[(p,c)] = Capacity[(p,c)] - bottleneck
-			if((Capacity[(p,c)]) < 0):
-				print(Capacity[(p,c)])
-			if((p,c) in Cf):
-				Cf[(p,c)] = Cf[(p,c)] + bottleneck
-			else:
-				Cf[(p,c)] = bottleneck
+			Capacity[(c,p)] += bottleneck
+
+			# if((p,c) in Cf):
+			# 	Cf[(p,c)] = Cf[(p,c)] + bottleneck
+			# else:
+			# 	Cf[(p,c)] = bottleneck
 			c = p
 			p = parent[c]
 
