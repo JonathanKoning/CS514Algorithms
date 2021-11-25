@@ -54,6 +54,7 @@ def Max_Flow_Fat(s,t,graph):
 			try:
 				u = H.popitem()
 			except:
+				stuck = 1
 				break
 			# print(u)
 			# Find all neighbors v of u in E with a positive capacity
@@ -61,9 +62,9 @@ def Max_Flow_Fat(s,t,graph):
 			# E = [key for key in Capacity if(key[0] == u[0] and Capacity[key] > 0)]
 			
 			# If the current flow is zero, we have gotten stuck
-			if u[1] == 0 and H.peekitem()[1] == 0:
-				stuck = 1
-				break
+			# if u[1] == 0 and H.peekitem()[1] == 0:
+			# 	stuck = 1
+			# 	break
 
 			for v in neighbors[u[0]]:
 				# If current flow at v is < the min(parent node, capacity of edge u,v) then we have found a better path
@@ -127,14 +128,14 @@ def Max_Flow_Fat(s,t,graph):
 		#reset flow to 0		
 		for key in flow:
 			flow[key] = 0
-		flow[s] = 10000
+		flow[s] = 1<<30
 
 	#Put flow into proper format
 	#This does not seem to affect the time	
 	f = []
-	for key in Cf:
-		f.append((key[0],key[1], Cf[key]))
-	f.sort(key=lambda y:y[0])
+	# for key in Cf:
+	# 	f.append((key[0],key[1], Cf[key]))
+	# f.sort(key=lambda y:y[0])
 	finalflow = (globalFlow, f)
 	print(Capacity)
 	return finalflow
